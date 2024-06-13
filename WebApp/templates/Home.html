@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stocking Form</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/homecss.css') }}">
+</head>
+<body>
+    <div class="form-container">
+        <h2>Stocking Form</h2>
+        <form>
+            <div class="form-group">
+                <label for="product-id">Product ID/Name</label>
+                <input type="text" id="product-id" name="product-id" required>
+            </div>
+            <div class="form-group">
+                <label for="source">Source of the Products</label>
+                <select id="source" name="source" required>
+                    <option value="cancelled-orders">Cancelled Orders</option>
+                    <option value="returned-orders">Returned Orders</option>
+                    <option value="vendor-shipments">Vendor Shipments</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="location">Location in the Warehouse</label>
+                <input type="text" id="location" name="location" required>
+            </div>
+            <div class="form-group">
+                <label for="quantity">Quantity</label>
+                <input type="number" id="quantity" name="quantity" required>
+            </div>
+            <div class="form-group">
+                <button type="submit">Submit</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

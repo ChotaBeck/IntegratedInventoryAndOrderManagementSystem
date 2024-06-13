@@ -1,0 +1,116 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 110vh;
+    background-color: #f7f7f7;
+    margin: 0;
+    font-family: Arial, poppins;
+}
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.login-box {
+    display: flex;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.login-left, .login-right {
+    padding: 40px;
+}
+
+.login-left {
+    background: #fff;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.login-right {
+    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(17,17,73,1) 27%);;
+    color: #fff;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.login-left h2, .login-right h2 {
+    margin: 0 0 20px;
+}
+
+.textbox {
+    margin-bottom: 20px;
+}
+
+.textbox input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    outline: none;
+    font-size: 12px;
+}
+
+.btn {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    background:  #fff;
+    color:#020024;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+    border-radius: 10px;
+    transition: background 0.3s;
+}
+
+.btn:hover {
+    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(237,237,245,1) 27%);
+}
+
+.remember-forgot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.remember-forgot label {
+    display: flex;
+    align-items: center;
+}
+
+.remember-forgot a {
+    color: #020024;
+    text-decoration: none;
+    font-size: small;
+    font-weight: 500;
+}
+
+.Login-btn {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    background: #020024;
+    color:  #fff; 
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+    border-radius: 10px;
+    transition: background 0.3s;
+}
+
+.Login-btn:hover{
+
+    background: #2b8b10; 
+}
