@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash
 from app.models import Product, Location
 from app.database import db
 
-product_bp = Blueprint('product_bp', __name__)
+product_bp = Blueprint('product', __name__)
 
 @product_bp.route('/products')
 def products():
@@ -20,7 +20,7 @@ def add_product():
         db.session.add(new_product)
         db.session.commit()
         flash('Product added successfully!')
-        return redirect(url_for('product_bp.products'))
+        return redirect(url_for('product.products'))
     locations = Location.query.all()  # Fetch locations to display in the form
     return render_template('add_product.html', locations=locations)
 
@@ -34,7 +34,7 @@ def edit_product(id):
         product.status = request.form['status']
         db.session.commit()
         flash('Product updated successfully!')
-        return redirect(url_for('product_bp.products'))
+        return redirect(url_for('product.products'))
     locations = Location.query.all()  # Fetch locations to display in the form
     return render_template('edit_product.html', product=product, locations=locations)
 
@@ -44,4 +44,4 @@ def delete_product(id):
     db.session.delete(product)
     db.session.commit()
     flash('Product deleted successfully!')
-    return redirect(url_for('product_bp.products'))
+    return redirect(url_for('product.products'))

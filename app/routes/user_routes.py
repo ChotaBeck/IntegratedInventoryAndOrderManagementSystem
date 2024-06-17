@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash
 from app.models import User
 from app.database import db
 
-user_bp = Blueprint('user_bp', __name__)
+user_bp = Blueprint('user', __name__)
 
 @user_bp.route('/users')
 def users():
@@ -19,7 +19,7 @@ def add_user():
         db.session.add(new_user)
         db.session.commit()
         flash('User added successfully!')
-        return redirect(url_for('user_bp.users'))
+        return redirect(url_for('user.users'))
     return render_template('add_user.html')
 
 @user_bp.route('/user/edit/<int:id>', methods=['GET', 'POST'])
@@ -31,7 +31,7 @@ def edit_user(id):
         user.email = request.form['email']
         db.session.commit()
         flash('User updated successfully!')
-        return redirect(url_for('user_bp.users'))
+        return redirect(url_for('user.users'))
     return render_template('edit_user.html', user=user)
 
 @user_bp.route('/user/delete/<int:id>')
@@ -40,4 +40,4 @@ def delete_user(id):
     db.session.delete(user)
     db.session.commit()
     flash('User deleted successfully!')
-    return redirect(url_for('user_bp.users'))
+    return redirect(url_for('user.users'))

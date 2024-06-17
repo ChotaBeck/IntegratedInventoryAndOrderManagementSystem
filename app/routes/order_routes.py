@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash
 from app.models import Order
 from app.database import db
 
-order_bp = Blueprint('order_bp', __name__)
+order_bp = Blueprint('order', __name__)
 
 @order_bp.route('/orders')
 def orders():
@@ -20,7 +20,7 @@ def add_order():
         db.session.add(new_order)
         db.session.commit()
         flash('Order added successfully!')
-        return redirect(url_for('order_bp.orders'))
+        return redirect(url_for('order.orders'))
     return render_template('add_order.html')
 
 @order_bp.route('/order/edit/<int:id>', methods=['GET', 'POST'])
@@ -33,7 +33,7 @@ def edit_order(id):
         order.shipping_address = request.form['shipping_address']
         db.session.commit()
         flash('Order updated successfully!')
-        return redirect(url_for('order_bp.orders'))
+        return redirect(url_for('order.orders'))
     return render_template('edit_order.html', order=order)
 
 @order_bp.route('/order/delete/<int:id>')
@@ -42,4 +42,4 @@ def delete_order(id):
     db.session.delete(order)
     db.session.commit()
     flash('Order deleted successfully!')
-    return redirect(url_for('order_bp.orders'))
+    return redirect(url_for('order.orders'))

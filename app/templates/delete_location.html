@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block main_content %}
+    <section class="dashboard">
+        <h2>Delete Location</h2>
+        <p>Are you sure you want to delete location: {{ location.name }}?</p>
+        <form method="POST" action="{{ url_for('location.delete_location', id=location.id) }}">
+            <button type="submit">Confirm Delete</button>
+        </form>
+    </section>
+{% endblock %}

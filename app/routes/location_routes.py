@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash,
 from app.models import Location
 from app.database import db
 
-location_bp = Blueprint('location_bp', __name__)
+location_bp = Blueprint('location', __name__)
 
 @location_bp.route('/locations')
 def locations():
@@ -18,7 +18,7 @@ def add_location():
         db.session.add(new_location)
         db.session.commit()
         flash('Location added successfully!')
-        return redirect(url_for('location_bp.locations'))
+        return redirect(url_for('location.locations'))
     return render_template('add_location.html')
 
 @location_bp.route('/location/edit/<int:id>', methods=['GET', 'POST'])
@@ -29,7 +29,7 @@ def edit_location(id):
         location.capacity = request.form['capacity']
         db.session.commit()
         flash('Location updated successfully!')
-        return redirect(url_for('location_bp.locations'))
+        return redirect(url_for('location_.locations'))
     return render_template('edit_location.html', location=location)
 
 @location_bp.route('/location/delete/<int:id>')
@@ -38,4 +38,4 @@ def delete_location(id):
     db.session.delete(location)
     db.session.commit()
     flash('Location deleted successfully!')
-    return redirect(url_for('location_bp.locations'))
+    return redirect(url_for('location.locations'))
