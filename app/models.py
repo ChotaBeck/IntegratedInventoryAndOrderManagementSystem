@@ -1,5 +1,5 @@
 from datetime import datetime
-from . import db
+from app.database import db
 
 class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)

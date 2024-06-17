@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from app.models import User
-from app import db
+from app.database import db
 
 user_bp = Blueprint('user_bp', __name__)
 
