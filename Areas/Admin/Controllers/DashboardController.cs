@@ -3,11 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 using IntegratedInventoryAndOrderManagementSystem.Models;
 
 namespace IntegratedInventoryAndOrderManagementSystem.Areas.admin.Controllers;
-public class HomeController : Controller
+
+[Area("Admin")]
+public class DashboardController : Controller
 {
     private readonly ILogger<HomeController> _logger;
 
-    public HomeController(ILogger<HomeController> logger)
+    public DashboardController(ILogger<HomeController> logger)
     {
         _logger = logger;
     }
