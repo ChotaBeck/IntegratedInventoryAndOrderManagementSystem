@@ -1,0 +1,32 @@
+﻿@model IEnumerable<Status> 
+
+@{
+    ViewData["Title"] = "Status";
+}
+
+<h1>Status</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Location ID</th>
+            <th>Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var status in Model)
+        {
+            <tr>
+                <td>@status.Id</td>
+                <td>@status.Name</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@status.Id" class="btn btn-primary">Details</a> 
+                    <a asp-controller="Location" asp-action="Edit" asp-route-id="@status.Id" class="btn btn-secondary">Edit</a> 
+                    <a asp-action="Delete" asp-route-id="@status.Id" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="Create" class="btn btn-success">Create New Product</a>

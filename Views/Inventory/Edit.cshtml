@@ -1,0 +1,33 @@
+@model Inventory
+
+@{
+    ViewData["Title"] = "Edit Inventory Item";
+}
+
+<h1>Edit Inventory Item</h1>
+
+<form asp-action="Edit">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="Id" />
+    <div class="form-group">
+        <label asp-for="ProductId">Product:</label>
+        <select asp-for="ProductId" class="form-control" asp-items="ViewBag.ProductId"></select> 
+        <span asp-validation-for="ProductId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="LocationId">Location:</label>
+        <select asp-for="LocationId" class="form-control" asp-items="ViewBag.LocationId"></select>
+        <span asp-validation-for="LocationId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Quantity">Quantity:</label>
+        <input asp-for="Quantity" class="form-control" />
+        <span asp-validation-for="Quantity" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+</form>
+
+<div>
+    <a asp-action="Index" class="btn btn-primary">Back to List</a>
+</div>

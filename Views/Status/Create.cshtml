@@ -1,0 +1,19 @@
+@model Status 
+
+@{
+    ViewData["Title"] = "Create Status";
+}
+
+<h1>Create Product</h1>
+
+<form asp-action="Create">
+    <div class="form-group">
+        <label asp-for="Name">Name:</label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+    <br>
+    <span>
+    <button type="submit" class="btn btn-primary">Create</button>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</span>
+</form>

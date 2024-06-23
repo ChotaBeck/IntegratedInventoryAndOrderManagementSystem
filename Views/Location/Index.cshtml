@@ -1,0 +1,32 @@
+﻿@model IEnumerable<Location> 
+
+@{
+    ViewData["Title"] = "Location";
+}
+
+<h1>Locations</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Location ID</th>
+            <th>Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var location in Model)
+        {
+            <tr>
+                <td>@location.Id</td>
+                <td>@location.Name</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@location.Id" class="btn btn-primary">Details</a> 
+                    <a asp-controller="Location" asp-action="Edit" asp-route-id="@location.Id" class="btn btn-secondary">Edit</a> 
+                    <a asp-action="Delete" asp-route-id="@location.Id" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="Create" class="btn btn-success">Create New Product</a>

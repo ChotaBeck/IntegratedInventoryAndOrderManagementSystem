@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using IntegratedInventoryAndOrderManagementSystem.Data;
+using IntegratedInventoryAndOrderManagementSystem.Models;
+using IntegratedInventoryAndOrderManagementSystem.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +14,18 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
+
+builder.Services.AddScoped<ServiceBase<Product>, ServiceBase<Product>>();
+builder.Services.AddScoped<ServiceBase<SalesOrder>, ServiceBase<SalesOrder>>();
+builder.Services.AddScoped<ServiceBase<Location>, ServiceBase<Location>>();
+builder.Services.AddScoped<ServiceBase<Customer>, ServiceBase<Customer>>();
+builder.Services.AddScoped<ServiceBase<Status>, ServiceBase<Status>>();
+builder.Services.AddScoped<ServiceBase<Shipment>, ServiceBase<Shipment>>();
+builder.Services.AddScoped<ServiceBase<PurchaseOrder>, ServiceBase<PurchaseOrder>>();
+builder.Services.AddScoped<ServiceBase<Employee>, ServiceBase<Employee>>();
+builder.Services.AddScoped<ServiceBase<Inventory>, ServiceBase<Inventory>>();
+builder.Services.AddScoped<ServiceBase<Vendor>, ServiceBase<Vendor>>();
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();

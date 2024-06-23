@@ -1,0 +1,40 @@
+@model SalesOrder
+
+@{
+    ViewData["Title"] = "Sales Order Details";
+}
+
+<h1>Sales Order Details</h1>
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">Order ID:</dt>
+        <dd class="col-sm-10">@Model.Id</dd>
+        <dt class="col-sm-2">Customer ID:</dt>
+        <dd class="col-sm-10">@Model.CustomerId</dd>
+        <dt class="col-sm-2">Order Date:</dt>
+        <dd class="col-sm-10">@Model.OrderDate.ToString("yyyy-MM-dd")</dd>
+        <dt class="col-sm-2">Status:</dt>
+        <dd class="col-sm-10">@Model.Status.Name</dd> 
+        <dt class="col-sm-2">Paid?:</dt>
+        <dd class="col-sm-10">@Model.isPaid</dd>
+        <dt class="col-sm-2">Total Cost:</dt>
+        <dd class="col-sm-10">@Model.TotalCost</dd>
+        <dt class="col-sm-2">Order Items:</dt>
+        <dd class="col-sm-10">
+            @if (Model.SalesOrderItems != null)
+            {
+                <ul>
+                    @foreach (var item in Model.SalesOrderItems)
+                    {
+                        <li>@item.Product.Name - Quantity: @item.Quantity</li> 
+                    }
+                </ul>
+            }
+        </dd> 
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-secondary">Edit</a> |
+    <a asp-action="Index" class="btn btn-primary">Back to List</a>
+</div>

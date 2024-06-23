@@ -1,0 +1,37 @@
+﻿@model IEnumerable<Shipment>
+
+@{
+    ViewData["Title"] = "Shipments";
+}
+
+<h1>Shipments</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Shipment ID</th>
+            <th>Sales Order ID</th>
+            <th>Shipping Date</th>
+            <th>Tracking Number</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var shipment in Model)
+        {
+            <tr>
+                <td>@shipment.Id</td>
+                <td>@shipment.SalesOrderId</td> 
+                <td>@shipment.ShippingDate.ToString("yyyy-MM-dd")</td> 
+                <td>@shipment.TrackingNumber</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@shipment.Id" class="btn btn-primary">Details</a> |
+                    <a asp-action="Edit" asp-route-id="@shipment.Id" class="btn btn-secondary">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@shipment.Id" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="Create" class="btn btn-success">Create New Shipment</a>

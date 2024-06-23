@@ -1,0 +1,32 @@
+@model Employee
+
+@{
+    ViewData["Title"] = "Employee Details";
+}
+
+<h1>Employee Details</h1>
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">Employee ID:</dt>
+        <dd class="col-sm-10">@Model.Id</dd>
+        <dt class="col-sm-2">Name:</dt>
+        <dd class="col-sm-10">@Model.Name</dd>
+        <dt class="col-sm-2">Email:</dt>
+        <dd class="col-sm-10">@Model.Email</dd>
+        <dt class="col-sm-2">Phone Number:</dt>
+        <dd class="col-sm-10">@Model.PhoneNumber</dd>
+        <dt class="col-sm-2">Address:</dt>
+        <dd class="col-sm-10">@Model.Address</dd>
+        <dt class="col-sm-2">Position:</dt>
+        <dd class="col-sm-10">@Model.Position</dd>
+        <dt class="col-sm-2">Man Number:</dt>
+        <dd class="col-sm-10">@Model.ManNumber</dd>
+        <dt class="col-sm-2">Department:</dt>
+        <dd class="col-sm-10">@Model.Department</dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-secondary">Edit</a> |
+    <a asp-action="Index" class="btn btn-primary">Back to List</a>
+</div>

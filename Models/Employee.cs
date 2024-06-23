@@ -7,7 +7,7 @@ namespace IntegratedInventoryAndOrderManagementSystem.Models
 {
     public class Employee : User
     {
-        public string Postion { get; set; }
+        public string Position { get; set; }
         public string ManNumber { get; set; }
         public string Department { get; set; }
     }

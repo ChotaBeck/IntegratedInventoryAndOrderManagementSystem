@@ -7,6 +7,6 @@ namespace IntegratedInventoryAndOrderManagementSystem.Models
 {
     public class Vendor : User
     {
-        
+        public string ProductSupplying { get; set; }
     }
 }

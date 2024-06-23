@@ -1,0 +1,33 @@
+@model Shipment
+
+@{
+    ViewData["Title"] = "Edit Shipment";
+}
+
+<h1>Edit Shipment</h1>
+
+<form asp-action="Edit">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="Id" />
+    <div class="form-group">
+        <label asp-for="SalesOrderId">Sales Order ID:</label>
+        <select asp-for="SalesOrderId" class="form-control" asp-items="ViewBag.SalesOrderId" disabled></select> 
+        <span asp-validation-for="SalesOrderId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="ShippingDate">Shipping Date:</label>
+        <input asp-for="ShippingDate" class="form-control" type="date"/>
+        <span asp-validation-for="ShippingDate" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="TrackingNumber">Tracking Number:</label>
+        <input asp-for="TrackingNumber" class="form-control" />
+        <span asp-validation-for="TrackingNumber" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+</form>
+
+<div>
+    <a asp-action="Index" class="btn btn-primary">Back to List</a>
+</div>
