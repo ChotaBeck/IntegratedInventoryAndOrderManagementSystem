@@ -1,0 +1,71 @@
+Database Design 
+-- Products
+CREATE TABLE Products (
+    ProductID INT PRIMARY KEY IDENTITY,
+    Name NVARCHAR(100),
+    Description NVARCHAR(MAX),
+    Category NVARCHAR(50),
+    UnitPrice DECIMAL(18,2),
+    QuantityInStock INT
+)
+
+-- Locations
+CREATE TABLE Locations (
+    LocationID INT PRIMARY KEY IDENTITY,
+    Name NVARCHAR(50),
+    Description NVARCHAR(MAX)
+)
+
+-- Inventory
+CREATE TABLE Inventory (
+    InventoryID INT PRIMARY KEY IDENTITY,
+    ProductID INT FOREIGN KEY REFERENCES Products(ProductID),
+    LocationID INT FOREIGN KEY REFERENCES Locations(LocationID),
+    Quantity INT
+)
+
+-- Orders
+CREATE TABLE Orders (
+    OrderID INT PRIMARY KEY IDENTITY,
+    OrderDate DATETIME,
+    CustomerID INT, -- Assuming you have a Customers table
+    Status NVARCHAR(20) -- e.g., 'Pending', 'Filled', 'Shipped', 'Cancelled'
+)
+
+-- OrderItems
+CREATE TABLE OrderItems (
+    OrderItemID INT PRIMARY KEY IDENTITY,
+    OrderID INT FOREIGN KEY REFERENCES Orders(OrderID),
+    ProductID INT FOREIGN KEY REFERENCES Products(ProductID),
+    Quantity INT,
+    UnitPrice DECIMAL(18,2)
+)
+
+-- PurchaseOrders
+CREATE TABLE PurchaseOrders (
+    POID INT PRIMARY KEY IDENTITY,
+    VendorID INT, -- Assuming you have a Vendors table
+    OrderDate DATETIME,
+    Status NVARCHAR(20) -- e.g., 'Pending', 'Received', 'Partially Received'
+)
+
+-- PurchaseOrderItems
+CREATE TABLE PurchaseOrderItems (
+    POItemID INT PRIMARY KEY IDENTITY,
+    POID INT FOREIGN KEY REFERENCES PurchaseOrders(POID),
+    ProductID INT FOREIGN KEY REFERENCES Products(ProductID),
+    Quantity INT,
+    UnitPrice DECIMAL(18,2)
+)
+
+-- Transactions
+CREATE TABLE Transactions (
+    TransactionID INT PRIMARY KEY IDENTITY,
+    TransactionDate DATETIME,
+    TransactionType NVARCHAR(50), -- e.g., 'Receive', 'Stock', 'Pick', 'Ship'
+    ProductID INT FOREIGN KEY REFERENCES Products(ProductID),
+    Quantity INT,
+    LocationID INT FOREIGN KEY REFERENCES Locations(LocationID),
+    OrderID INT NULL FOREIGN KEY REFERENCES Orders(OrderID),
+    POID INT NULL FOREIGN KEY REFERENCES PurchaseOrders(POID)
+)
