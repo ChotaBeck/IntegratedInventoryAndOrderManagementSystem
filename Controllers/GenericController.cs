@@ -12,7 +12,7 @@ namespace IntegratedInventoryAndOrderManagementSystem.Controllers;
 public abstract class GenericController<T> : Controller where T : class
 {
     private readonly ILogger<GenericController<T>> _logger;
-    private readonly ServiceBase<T> _entity;
+    protected readonly ServiceBase<T> _entity;
 
     public GenericController(ILogger<GenericController<T>> logger, ServiceBase<T> entity)
     {
@@ -23,13 +23,13 @@ public abstract class GenericController<T> : Controller where T : class
 
     //Get  enttites 
     [HttpGet]
-    public IActionResult Index()
+    virtual public IActionResult Index()
     { 
         return View(_entity.GetAll());
     }
 
     [HttpGet]
-    public IActionResult Details(int id)
+    virtual public IActionResult Details(int id)
     {
         var entity = _entity.GetById(id);
         if(id == null)
@@ -41,14 +41,14 @@ public abstract class GenericController<T> : Controller where T : class
     }
 
     [HttpGet]
-     public IActionResult Create()
+    virtual public IActionResult Create()
     {
         return View();
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult Create(T entity)
+    virtual public IActionResult Create(T entity)
     {
         if(_entity.Add(entity))
         {
@@ -58,7 +58,7 @@ public abstract class GenericController<T> : Controller where T : class
     }
 
     [HttpGet]
-    public IActionResult Edit(int id)
+    virtual public IActionResult Edit(int id)
     {
         
         var entity =  _entity.GetById(id);
@@ -69,7 +69,7 @@ public abstract class GenericController<T> : Controller where T : class
         return View(entity);
     }
     [HttpPost]
-    public IActionResult Edit(T entity)
+     virtual public IActionResult Edit(T entity)
     {
         if (_entity.Update(entity))
         {
@@ -80,7 +80,7 @@ public abstract class GenericController<T> : Controller where T : class
     
         
     [HttpGet]
-    public IActionResult Delete(int id)
+    virtual public IActionResult Delete(int id)
     {
         var entity =  _entity.GetById(id);
         if (entity == null)
@@ -90,7 +90,7 @@ public abstract class GenericController<T> : Controller where T : class
         return View(entity);
     }
     [HttpPost]
-    public IActionResult Delete(T entity)
+    virtual public IActionResult Delete(T entity)
     {
         if (_entity.Delete(entity))
         {

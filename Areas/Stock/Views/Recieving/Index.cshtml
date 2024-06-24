@@ -1,0 +1,41 @@
+﻿@model IEnumerable<PurchaseOrder>
+
+@{
+    ViewData["Title"] = "Purchase";
+}
+
+<h1>Purchases</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Purchase ID</th>
+            <th>Vendor</th>
+            <th>Order Date</th>
+            <th>Status</th>
+            <th>Total Cost</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var purchase in Model)
+        {   
+            @if(purchase.Status.Name != "Received")
+            {
+            <tr>
+                <td>@purchase.Id</td>
+                <td>@purchase.Vendor.Name</td> 
+                <td>@purchase.OrderDate.ToString("yyyy-MM-dd")</td> 
+                <td>@purchase.Status.Name</td> 
+                <td>@purchase.TotalCost</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@purchase.Id" class="btn btn-primary">Details</a> |
+                    <a asp-action="Edit" asp-route-id="@purchase.Id" class="btn btn-secondary">Edit</a> |
+                </td>
+            </tr>
+            }
+        }
+    </tbody>
+</table>
+
+

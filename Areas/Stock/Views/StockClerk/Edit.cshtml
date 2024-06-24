@@ -11,12 +11,12 @@
     <input type="hidden" asp-for="Id" />
     <div class="form-group">
         <label asp-for="ProductId">Product:</label>
-        <select asp-for="ProductId" class="form-control" asp-items="ViewBag.Products"></select> 
+        <select asp-for="ProductId" class="form-control" asp-items="ViewBag.ProductId"></select> 
         <span asp-validation-for="ProductId" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label asp-for="LocationId">Location:</label>
-        <select asp-for="LocationId" class="form-control" asp-items="ViewBag.Locations"></select>
+        <select asp-for="LocationId" class="form-control" asp-items="ViewBag.LocationId"></select>
         <span asp-validation-for="LocationId" class="text-danger"></span>
     </div>
     <div class="form-group">

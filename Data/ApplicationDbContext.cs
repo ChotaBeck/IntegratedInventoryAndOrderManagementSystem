@@ -1,4 +1,5 @@
 ﻿using IntegratedInventoryAndOrderManagementSystem.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,6 +23,8 @@ public class ApplicationDbContext : IdentityDbContext
     public DbSet<SalesOrder> SalesOrders { get; set; }
     public DbSet<SalesOrderItem> SalesOrderItems { get; set; }
     public DbSet<Employee> Employees { get; set; }
+    public DbSet<UserRole> UserRoles { get; set; }
 
+    
 
 }

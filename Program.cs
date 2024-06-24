@@ -25,6 +25,7 @@ builder.Services.AddScoped<ServiceBase<PurchaseOrder>, ServiceBase<PurchaseOrder
 builder.Services.AddScoped<ServiceBase<Employee>, ServiceBase<Employee>>();
 builder.Services.AddScoped<ServiceBase<Inventory>, ServiceBase<Inventory>>();
 builder.Services.AddScoped<ServiceBase<Vendor>, ServiceBase<Vendor>>();
+builder.Services.AddScoped<ServiceBase<UserRole>, ServiceBase<UserRole>>();
 
 builder.Services.AddControllersWithViews();
 
@@ -52,6 +53,9 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "Admin",
     pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}");
+app.MapControllerRoute(
+    name: "Stock",
+    pattern: "{area:exists}/{controller=Recieving}/{action=Index}/{id?}");
 
 app.MapControllerRoute(
     name: "default",

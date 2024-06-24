@@ -1,0 +1,32 @@
+﻿@model IEnumerable<UserRole> 
+
+@{
+    ViewData["Title"] = "User Role";
+}
+
+<h1>User Role</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>User Role ID</th>
+            <th>Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var userRole in Model)
+        {
+            <tr>
+                <td>@userRole.Id</td>
+                <td>@userRole.Name</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@userRole.Id" class="btn btn-primary">Details</a> 
+                    <a asp-controller="Location" asp-action="Edit" asp-route-id="@userRole.Id" class="btn btn-secondary">Edit</a> 
+                    <a asp-action="Delete" asp-route-id="@userRole.Id" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="Create" class="btn btn-success">Create New Role</a>
