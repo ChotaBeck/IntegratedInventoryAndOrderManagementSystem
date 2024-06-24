@@ -1,16 +1,15 @@
 ﻿@model IEnumerable<PurchaseOrder>
 
-@{
-    ViewData["Title"] = "Purchases";
-}
+<h1>Purchase Orders</h1>
 
-<h1>Purchases</h1>
-
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
 <table class="table">
     <thead>
         <tr>
-            <th>Purchase ID</th>
-            <th>Vendor</th>
+            <th>ID</th>
+            <th>Vendor ID</th>
             <th>Order Date</th>
             <th>Status</th>
             <th>Total Cost</th>
@@ -18,22 +17,20 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var purchase in Model)
+        @foreach (var item in Model)
         {
             <tr>
-                <td>@purchase.Id</td>
-                <td>@purchase.Vendor.Name</td> 
-                <td>@purchase.OrderDate.ToString("yyyy-MM-dd")</td> 
-                <td>@purchase.Status.Name</td> 
-                <td>@purchase.TotalCost</td>
+                <td>@item.Id</td>
+                <td>@item.VendorId</td>
+                <td>@item.OrderDate.ToString("d")</td>
+                <td>@item.Status.Name</td>
+                <td>@item.TotalCost.ToString("C")</td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@purchase.Id" class="btn btn-primary">Details</a> |
-                    <a asp-action="Edit" asp-route-id="@purchase.Id" class="btn btn-secondary">Edit</a> |
-                    <a asp-action="Delete" asp-route-id="@purchase.Id" class="btn btn-danger">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
-
-<a asp-action="Create" class="btn btn-success">Create New Purchase</a>

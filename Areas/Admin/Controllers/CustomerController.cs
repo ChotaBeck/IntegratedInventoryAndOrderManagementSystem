@@ -3,11 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 using IntegratedInventoryAndOrderManagementSystem.Models;
 using IntegratedInventoryAndOrderManagementSystem.Services;
 using IntegratedInventoryAndOrderManagementSystem.Controllers;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace IntegratedInventoryAndOrderManagementSystem.Areas.admin.Controllers;
 
  [Area("Admin")]
+ [Authorize(Roles = "Admin")]
 public class CustomerController : GenericController<Customer>
 {
     private readonly ILogger<CustomerController> _logger;

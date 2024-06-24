@@ -1,31 +1,84 @@
-@model PurchaseOrder
+@model CreatePurchaseOrderViewModel
 
-@{
-    ViewData["Title"] = "Create Purchase";
-}
+<h2>Create Purchase Order</h2>
 
-<h1>Create Purchase</h1>
+<form asp-action="Create">
+    <div class="form-group">
+        <label asp-for="CustomerId"></label>
+        <input asp-for="CustomerId" class="form-control" />
+        <span asp-validation-for="CustomerId" class="text-danger"></span>
+    </div>
 
-<form asp-action="Add">
     <div class="form-group">
-        <label asp-for="VendorId">Vendor:</label> 
-        <select asp-for="VendorId" class="form-control" asp-items="ViewBag.VendorId"></select>
+        <label asp-for="OrderDate"></label>
+        <input asp-for="OrderDate" class="form-control" />
+        <span asp-validation-for="OrderDate" class="text-danger"></span>
     </div>
+
     <div class="form-group">
-        <label asp-for="OrderDate">Order Date:</label>
-        <input asp-for="OrderDate" class="form-control" type="date"/> 
+        <label asp-for="StatusId"></label>
+        <select asp-for="StatusId" class="form-control" asp-items="ViewBag.Statuses"></select>
+        <span asp-validation-for="StatusId" class="text-danger"></span>
     </div>
+
+    <h3>Order Items</h3>
+    <div id="orderItems">
+        @for (int i = 0; i < Model.Items.Count; i++)
+        {
+            <div class="order-item">
+                <input type="hidden" asp-for="Items[i].ProductId" />
+                <div class="form-group">
+                    <label asp-for="Items[i].ProductId">Product</label>
+                    <select asp-for="Items[i].ProductId" class="form-control" asp-items="ViewBag.Products"></select>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Items[i].Quantity">Quantity</label>
+                    <input asp-for="Items[i].Quantity" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Items[i].UnitPrice">Unit Price</label>
+                    <input asp-for="Items[i].UnitPrice" class="form-control" />
+                </div>
+            </div>
+        }
+    </div>
+
+    <button type="button" id="addItem">Add Item</button>
+
     <div class="form-group">
-        <label asp-for="StatusId">Status:</label>
-        <select asp-for="StatusId" class="form-control" asp-items="ViewBag.StatusId"></select>
+        <input type="submit" value="Create" class="btn btn-primary" />
     </div>
-    <div class="form-group">
-        <label asp-for="TotalCost">Total Cost:</label>
-        <input asp-for="TotalCost" class="form-control" />
-    </div>
-    <button type="submit" class="btn btn-primary">Create</button>
 </form>
 
-<div>
-    <a asp-action="Index" class="btn btn-primary">Back to List</a>
-</div>
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $("#addItem").click(function() {
+                var index = $("#orderItems .order-item").length;
+                var newItem = `
+                    <div class="order-item">
+                        <input type="hidden" name="Items[${index}].ProductId" />
+                        <div class="form-group">
+                            <label>Product</label>
+                            <select name="Items[${index}].ProductId" class="form-control">
+                                @foreach (var item in ViewBag.Products)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Quantity</label>
+                            <input name="Items[${index}].Quantity" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label>Unit Price</label>
+                            <input name="Items[${index}].UnitPrice" class="form-control" />
+                        </div>
+                    </div>
+                `;
+                $("#orderItems").append(newItem);
+            });
+        });
+    </script>
+}

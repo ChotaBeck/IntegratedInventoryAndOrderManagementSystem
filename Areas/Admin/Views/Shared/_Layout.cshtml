@@ -8,31 +8,7 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/IntegratedInventoryAndOrderManagementSystem.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
-    <style>
-    .sidebar-nav ul {
-        list-style: none;
-        padding-left: 0;
-    }
-    .sidebar-nav li {
-        position: relative;
-    }
-    .sidebar-nav .dropdown-toggle::after {
-        content: '\25BC';
-        position: absolute;
-        right: 10px;
-        top: 50%;
-        transform: translateY(-50%);
-    }
-    .sidebar-nav .dropdown-menu {
-        display: none;
-        padding-left: 20px;
-    }
-    .sidebar-nav .dropdown:hover > .dropdown-menu {
-        display: block;
-    }
-</style>
 </head>
-
 <body>
     <div class="dashboard-container">
         <!-- Sidebar -->
@@ -42,50 +18,38 @@
             </div>
             <ul class="list-unstyled components">
                 <li class="active">
-                    <a href="../home"><i class="fas fa-home"></i> Dashboard</a>
-                </li>
-                <li>
-                    <a href="../admin/product"><i class="fas fa-box"></i> Products</a>
-                </li>
-                <li>
-                    <a href="../salesorder"><i class="fas fa-shopping-cart"></i> Orders</a>
-                </li>
-                <li>
-                    <a href="../shipment"><i class="fas fa-truck"></i> Shipments</a>
-                </li>
-                <li>
-                    <a href="../inventory"><i class="fas fa-warehouse"></i> Inventory</a>
-                </li>
-                 <li>
-                    <a href="../Employee"><i class="fas fa-person"></i> Employee</a>
-                </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle"><i class="fas fa-chart-bar"></i> Reports</a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Sales Report</a></li>
-                        <li><a href="#">Inventory Report</a></li>
-                        <li><a href="#">Financial Report</a></li>
-                    </ul>
-                </li>
-
-                 <li>
-                    <a href="../customer"><i class="fas fa-warehouse"></i> Customer</a>
-                </li>
-                <li>
-                    <a href="../vendor"><i class="fas fa-warehouse"></i> vendor</a>
-                </li>
-                <li>
-                    <a href="../location"><i class="fas fa-warehouse"></i> Location</a>
-                </li>
-                <li>
-                    <a href="../PurchaseOrder"><i class="fas fa-warehouse"></i> PurchaseOrder</a>
-                </li>
-                <li>
-                    <a href="../status"><i class="fas fa-warehouse"></i> Status</a>
-                </li>
-                <li>
-                    <a href="#"><i class="fas fa-chart-bar"></i> Reports</a>
-                </li>
+    <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index"><i class="fas fa-home"></i> Dashboard</a>
+</li>
+<li>
+    <a asp-area="Admin" asp-controller="Product" asp-action="Index"></i> Products</a>
+</li>
+<li>
+    <a asp-area="Admin" asp-controller="SalesOrder" asp-action="Index"><i class="fas fa-shopping-cart"></i> Sales Orders</a>
+</li>
+<li>
+    <a asp-area="Admin" asp-controller="Shipment" asp-action="Index"><i class="fas fa-truck"></i> Shipments</a>
+</li>
+<li>
+    <a asp-area="Admin" asp-controller="Inventory" asp-action="Index"><i class="fas fa-warehouse"></i> Inventory</a>
+</li>
+<li>
+    <a asp-area="Admin" asp-controller="Location" asp-action="Index"><i class="fas fa-map-marker-alt"></i> Locations</a>
+</li>
+<li>
+    <a asp-area="Admin" asp-controller="Status" asp-action="Index"><i class="fas fa-tasks"></i> Statuses</a>
+</li>
+<li>
+    <a asp-area="Admin" asp-controller="Vendor" asp-action="Index"><i class="fas fa-industry"></i> Vendors</a>
+</li>
+<li>
+    <a asp-area="Admin" asp-controller="Customer" asp-action="Index"><i class="fas fa-user-friends"></i> Customers</a>
+</li>
+<li>
+    <a asp-area="Admin" asp-controller="PurchaseOrder" asp-action="Index"><i class="fas fa-file-invoice-dollar"></i> Purchase Orders</a>
+</li>
+<li>
+    <a asp-area="Admin" asp-controller="Admin" asp-action="Index"><i class="fas fa-chart-bar"></i> Reports</a>
+</li>
             </ul>
         </nav>
 
@@ -95,7 +59,7 @@
                 <div class="container-fluid">
                     <button type="button" id="sidebarCollapse" class="btn btn-info">
                         <i class="fas fa-align-left"></i>
-                        <span>Toggle Menu</span>
+                        <span>Toggle Sidebar</span>
                     </button>
                     <div class="ml-auto">
                         <partial name="_LoginPartial" />

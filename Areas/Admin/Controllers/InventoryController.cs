@@ -5,10 +5,12 @@ using IntegratedInventoryAndOrderManagementSystem.Services;
 using IntegratedInventoryAndOrderManagementSystem.Controllers;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using IntegratedInventoryAndOrderManagementSystem.Data;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace IntegratedInventoryAndOrderManagementSystem.Areas.admin.Controllers;
 [Area("Admin")]
+[Authorize(Roles = "Admin")]
 public class InventoryController : GenericController<Inventory>
 {
     private readonly ILogger<InventoryController> _logger;
