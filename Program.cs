@@ -66,61 +66,61 @@ app.MapControllerRoute(
 
 app.MapRazorPages();
 
-using(var scope = app.Services.CreateScope())
-{
-    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+// using(var scope = app.Services.CreateScope())
+// {
+//     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-    var roles = new[] {"Admin", "Order", "Customer", "Accounts","StockManager"};
-    foreach(var role in roles)
-    {
-        if(!roleManager.RoleExistsAsync(role).Result)
-        {
-            roleManager.CreateAsync(new IdentityRole(role)).Wait();
-        }
-    }
-}
-using (var scope = app.Services.CreateScope())
-{
-    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+//     var roles = new[] {"Admin", "Order", "Customer", "Accounts","StockManager"};
+//     foreach(var role in roles)
+//     {
+//         if(!roleManager.RoleExistsAsync(role).Result)
+//         {
+//             roleManager.CreateAsync(new IdentityRole(role)).Wait();
+//         }
+//     }
+// }
+// using (var scope = app.Services.CreateScope())
+// {
+//     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
 
-    var usersToCreate = new List<(string Email, string Password, string Role)>
-    {
-        ("admin@admin.com", "Admin@123.", "Admin"),
-        ("order@order.com", "Order@123.", "Order"),
-        ("customer@customer.com", "Customer@123.", "Customer"),
-        ("accounts@accounts.com", "Accounts@123.", "Accounts"),
-        ("stockmanager@stockmanager.com", "StockManager@123.", "StockManager")
-    };
+//     var usersToCreate = new List<(string Email, string Password, string Role)>
+//     {
+//         ("admin@admin.com", "Admin@123.", "Admin"),
+//         ("order@order.com", "Order@123.", "Order"),
+//         ("customer@customer.com", "Customer@123.", "Customer"),
+//         ("accounts@accounts.com", "Accounts@123.", "Accounts"),
+//         ("stockmanager@stockmanager.com", "StockManager@123.", "StockManager")
+//     };
 
-    foreach (var (email, password, role) in usersToCreate)
-    {
-        try
-        {
-            if (await userManager.FindByEmailAsync(email) == null)
-            {
-                var user = new IdentityUser
-                {
-                    UserName = email,
-                    Email = email
-                };
-                var result = await userManager.CreateAsync(user, password);
-                if (result.Succeeded)
-                {
-                    await userManager.AddToRoleAsync(user, role);
-                }
-                else
-                {
-                    // Handle user creation failure
-                    Console.WriteLine($"Failed to create user {email}: {string.Join(", ", result.Errors.Select(e => e.Description))}");
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            // Handle exceptions
-            Console.WriteLine($"An error occurred while processing user {email}: {ex.Message}");
-        }
-    }
-}
+//     foreach (var (email, password, role) in usersToCreate)
+//     {
+//         try
+//         {
+//             if (await userManager.FindByEmailAsync(email) == null)
+//             {
+//                 var user = new IdentityUser
+//                 {
+//                     UserName = email,
+//                     Email = email
+//                 };
+//                 var result = await userManager.CreateAsync(user, password);
+//                 if (result.Succeeded)
+//                 {
+//                     await userManager.AddToRoleAsync(user, role);
+//                 }
+//                 else
+//                 {
+//                     // Handle user creation failure
+//                     Console.WriteLine($"Failed to create user {email}: {string.Join(", ", result.Errors.Select(e => e.Description))}");
+//                 }
+//             }
+//         }
+//         catch (Exception ex)
+//         {
+//             // Handle exceptions
+//             Console.WriteLine($"An error occurred while processing user {email}: {ex.Message}");
+//         }
+//     }
+// }
 
 app.Run();
