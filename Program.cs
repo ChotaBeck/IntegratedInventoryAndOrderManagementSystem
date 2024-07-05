@@ -23,10 +23,9 @@ builder.Services.AddScoped<ServiceBase<Customer>, ServiceBase<Customer>>();
 builder.Services.AddScoped<ServiceBase<Status>, ServiceBase<Status>>();
 builder.Services.AddScoped<ServiceBase<Shipment>, ServiceBase<Shipment>>();
 builder.Services.AddScoped<ServiceBase<PurchaseOrder>, ServiceBase<PurchaseOrder>>();
-builder.Services.AddScoped<ServiceBase<Employee>, ServiceBase<Employee>>();
 builder.Services.AddScoped<ServiceBase<Inventory>, ServiceBase<Inventory>>();
 builder.Services.AddScoped<ServiceBase<Vendor>, ServiceBase<Vendor>>();
-builder.Services.AddScoped<ServiceBase<UserRole>, ServiceBase<UserRole>>();
+
 
 builder.Services.AddControllersWithViews();
 

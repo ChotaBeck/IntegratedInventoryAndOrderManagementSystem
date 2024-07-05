@@ -17,7 +17,7 @@ namespace IntegratedInventoryAndOrderManagementSystem.Models
         [ForeignKey("StatusId")]
         public Status Status { get; set; }
         public List<PurchaseOrderItem> PurchaseOrderItems { get; set; }
-        public double TotalCost { get; set; }
+        public decimal TotalCost { get; set; }
 
     }
 }

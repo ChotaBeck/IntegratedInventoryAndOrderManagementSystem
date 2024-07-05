@@ -14,5 +14,11 @@ namespace IntegratedInventoryAndOrderManagementSystem.Models
         public SalesOrder SalesOrder { get; set; }
         public DateOnly ShippingDate { get; set; }
         public string TrackingNumber { get; set; }
+        public string ShippingCarrier { get; set; }
+        public decimal ShippingCost { get; set; }
+        public int StatusId { get; set; }
+        [ForeignKey("StatusId")]
+        public Status Status { get; set; }
+        
     }
 }

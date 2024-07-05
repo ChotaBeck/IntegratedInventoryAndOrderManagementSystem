@@ -16,7 +16,7 @@ namespace IntegratedInventoryAndOrderManagementSystem.Models
         [ForeignKey("ProductId")]
         public Product Product { get; set; }
         public int Quantity { get; set; }
-        public double SellingPrice { get; set; }
+        public decimal SellingPrice { get; set; }
 
     }
 }

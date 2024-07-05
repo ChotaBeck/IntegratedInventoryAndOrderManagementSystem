@@ -16,7 +16,9 @@ namespace IntegratedInventoryAndOrderManagementSystem.Models
         public Status Status { get; set; }
         public List<SalesOrderItem> SalesOrderItems { get; set; }
         public bool isPaid { get; set; } = false;
-        public double TotalCost { get; set; }
+        public decimal TotalCost { get; set; }
+        public DateTime? ShipDate { get; set; }
+        public string TrackingNumber { get; set; }
 
     }
 }
