@@ -22,4 +22,5 @@ public class ApplicationDbContext : IdentityDbContext
     public DbSet<Shipment> Shipments { get; set; }
     public DbSet<SalesOrder> SalesOrders { get; set; }
     public DbSet<SalesOrderItem> SalesOrderItems { get; set; }
+    public DbSet<Department> Departments { get; set; }
 }

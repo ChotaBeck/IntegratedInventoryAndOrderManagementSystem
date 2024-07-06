@@ -3,11 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using IntegratedInventoryAndOrderManagementSystem.Models;
 
 namespace IntegratedInventoryAndOrderManagementSystem.Controllers;
-public class HomeController : Controller
+public class NotificationController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
+    private readonly ILogger<NotificationController> _logger;
 
-    public HomeController(ILogger<HomeController> logger)
+    public NotificationController(ILogger<NotificationController> logger)
     {
         _logger = logger;
     }

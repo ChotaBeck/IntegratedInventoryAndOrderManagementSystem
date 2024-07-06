@@ -1,13 +1,16 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using IntegratedInventoryAndOrderManagementSystem.Models;
+using Microsoft.AspNetCore.Authorization;
 
-namespace IntegratedInventoryAndOrderManagementSystem.Controllers;
-public class HomeController : Controller
+namespace IntegratedInventoryAndOrderManagementSystemControllers;
+
+[Authorize(Roles = "Admin")]
+public class DashboardController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
+    private readonly ILogger<DashboardController> _logger;
 
-    public HomeController(ILogger<HomeController> logger)
+    public DashboardController(ILogger<DashboardController> logger)
     {
         _logger = logger;
     }
