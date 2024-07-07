@@ -18,9 +18,43 @@
             <div class="sidebar-header">
                 <h3>Inventory System</h3>
             </div>
-            <ul class="list-unstyled components">
-                
-             
+           <ul class="list-unstyled components">
+                <li class="active">
+                    <a asp-area="Admin" asp-controller="Home" asp-action="Index"><i class="fas fa-home"></i> Dashboard</a>
+                </li>
+                <li>
+                    <a asp-area="Admin" asp-controller="Product" asp-action="Index"><i class="fas fa-box"></i> Products</a>
+                </li>
+                <li>
+                    <a asp-area="Admin" asp-controller="SalesOrder" asp-action="Index"><i class="fas fa-shopping-cart"></i> Orders</a>
+                </li>
+                <li>
+                    <a asp-area="Admin" asp-controller="Shipment" asp-action="Index"><i class="fas fa-truck"></i> Shipments</a>
+                </li>
+                <li>
+                    <a asp-area="Admin" asp-controller="Inventory" asp-action="Index"><i class="fas fa-warehouse"></i> Inventory</a>
+                </li>
+                <li>
+                    <a asp-area="Admin" asp-controller="Employee" asp-action="Index"><i class="fas fa-user"></i> Employee</a>
+                </li>
+                <li>
+                    <a asp-area="Admin" asp-controller="Customer" asp-action="Index"><i class="fas fa-user"></i> Customer</a>
+                </li>
+                <li>
+                    <a asp-area="Admin" asp-controller="Vendor" asp-action="Index"><i class="fas fa-truck"></i> Vendor</a>
+                </li>
+                <li>
+                    <a asp-area="Admin" asp-controller="Location" asp-action="Index"><i class="fas fa-map-marker-alt"></i> Location</a>
+                </li>
+                <li>
+                    <a asp-area="Admin" asp-controller="PurchaseOrder" asp-action="Index"><i class="fas fa-shopping-cart"></i> Purchase Order</a>
+                </li>
+                <li>
+                    <a asp-area="Admin" asp-controller="Status" asp-action="Index"><i class="fas fa-info-circle"></i> Status</a>
+                </li>
+                <li>
+                    <a asp-area="Admin" asp-controller="Report" asp-action="Index"><i class="fas fa-chart-bar"></i> Reports</a>
+                </li>
             </ul>
         </nav>
 
