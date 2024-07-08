@@ -10,7 +10,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
     
 </head>
-
+@{
+    bool IsCurrentRoute(string controller, string action = "Index")
+    {
+        var currentController = ViewContext.RouteData.Values["controller"] as string;
+        var currentAction = ViewContext.RouteData.Values["action"] as string;
+        return string.Equals(currentController, controller, StringComparison.OrdinalIgnoreCase) &&
+               string.Equals(currentAction, action, StringComparison.OrdinalIgnoreCase);
+    }
+}
 <body>
     <div class="dashboard-container">
         <!-- Sidebar -->
@@ -18,20 +26,75 @@
             <div class="sidebar-header">
                 <h3>Inventory System</h3>
             </div>
-            <ul class="list-unstyled components">
-                
-             
-            </ul>
+                <ul class="list-unstyled components">
+            <li class="@(IsCurrentRoute("Home") ? "active" : "")">
+                <a class="d-flex align-items-center py-2" asp-area="Admin" asp-controller="Home" asp-action="Index">
+                    <i class="fas fa-home me-2"></i> Dashboard
+                </a>
+            </li>
+            <li class="@(IsCurrentRoute("Product") ? "active" : "")">
+                <a class="d-flex align-items-center py-2" asp-area="Admin" asp-controller="Product" asp-action="Index">
+                    <i class="fas fa-box me-2"></i> Products
+                </a>
+            </li>
+            <li class="@(IsCurrentRoute("SalesOrder") ? "active" : "")">
+                <a class="d-flex align-items-center py-2" asp-area="Admin" asp-controller="SalesOrder" asp-action="Index">
+                    <i class="fas fa-shopping-cart me-2"></i> Orders
+                </a>
+            </li>
+            <li class="@(IsCurrentRoute("Shipment") ? "active" : "")">
+                <a class="d-flex align-items-center py-2" asp-area="Admin" asp-controller="Shipment" asp-action="Index">
+                    <i class="fas fa-truck me-2"></i> Shipments
+                </a>
+            </li>
+            <li class="@(IsCurrentRoute("Inventory") ? "active" : "")">
+                <a class="d-flex align-items-center py-2" asp-area="Admin" asp-controller="Inventory" asp-action="Index">
+                    <i class="fas fa-warehouse me-2"></i> Inventory
+                </a>
+            </li>
+            <li class="@(IsCurrentRoute("Customer") ? "active" : "")">
+                <a class="d-flex align-items-center py-2" asp-area="Admin" asp-controller="Customer" asp-action="Index">
+                    <i class="fas fa-user me-2"></i> Customer
+                </a>
+            </li>
+            <li class="@(IsCurrentRoute("Vendor") ? "active" : "")">
+                <a class="d-flex align-items-center py-2" asp-area="Admin" asp-controller="Vendor" asp-action="Index">
+                    <i class="fas fa-truck me-2"></i> Vendor
+                </a>
+            </li>
+            <li class="@(IsCurrentRoute("Location") ? "active" : "")">
+                <a class="d-flex align-items-center py-2" asp-area="Admin" asp-controller="Location" asp-action="Index">
+                    <i class="fas fa-map-marker-alt me-2"></i> Location
+                </a>
+            </li>
+            <li class="@(IsCurrentRoute("PurchaseOrder") ? "active" : "")">
+                <a class="d-flex align-items-center py-2" asp-area="Admin" asp-controller="PurchaseOrder" asp-action="Index">
+                    <i class="fas fa-shopping-cart me-2"></i> Purchase Order
+                </a>
+            </li>
+            <li class="@(IsCurrentRoute("Status") ? "active" : "")">
+                <a class="d-flex align-items-center py-2" asp-area="Admin" asp-controller="Status" asp-action="Index">
+                    <i class="fas fa-info-circle me-2"></i> Status
+                </a>
+            </li>
+            <li class="@(IsCurrentRoute("Report") ? "active" : "")">
+                <a class="d-flex align-items-center py-2" asp-area="Admin" asp-controller="Report" asp-action="Index">
+                    <i class="fas fa-chart-bar me-2"></i> Reports
+                </a>
+            </li>
+        </ul>
+
         </nav>
 
         <!-- Page Content -->
         <div id="content">
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <div class="container-fluid">
-                    <button type="button" id="sidebarCollapse" class="btn btn-info">
-                        <i class="fas fa-align-left"></i>
-                        <span>Toggle Menu</span>
+                    <button type="button" id="sidebarCollapse" class="btn btn-info toggle-btn">
+                        <i class="fas fa-warehouse fa-fw"></i>
+                        <span>Inventory Menu</span>
                     </button>
+                    
                     <div class="ml-auto">
                         <partial name="_LoginPartial" />
                     </div>
@@ -45,8 +108,8 @@
     </div>
 
     <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - Inventory Management System - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        <div class="container w-100 text-center">
+            Developed by | Faith Munkonko | Future Mulenga | Chota Mulenga | Joseph | Charles Chisale | Glasses Ohn |
         </div>
     </footer>
 

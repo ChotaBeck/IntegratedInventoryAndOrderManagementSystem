@@ -1,11 +1,14 @@
 using System;
+
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
+
 namespace IntegratedInventoryAndOrderManagementSystem.Models
 {
+
     public class Inventory
     {
         public int Id { get; set; }
@@ -16,6 +19,6 @@ namespace IntegratedInventoryAndOrderManagementSystem.Models
         [ForeignKey("LocationId")]
         public Location Location { get; set; }
         public int Quantity { get; set; }
-        
-    }
-}
+    
+    } 
+}  
