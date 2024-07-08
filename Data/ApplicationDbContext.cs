@@ -18,9 +18,11 @@ public class ApplicationDbContext : IdentityDbContext
     public DbSet<Status> Statuses { get; set; }
     public DbSet<Vendor> Vendors { get; set; }
     public DbSet<Inventory> Inventories { get; set; }
+    public DbSet<InventoryAdjustment> InventoryAdjustments { get; set; }
     public DbSet<Location> Locations { get; set; }
     public DbSet<Shipment> Shipments { get; set; }
     public DbSet<SalesOrder> SalesOrders { get; set; }
     public DbSet<SalesOrderItem> SalesOrderItems { get; set; }
     public DbSet<Department> Departments { get; set; }
+    
 }

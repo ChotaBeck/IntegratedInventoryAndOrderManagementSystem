@@ -9,13 +9,13 @@ namespace IntegratedInventoryAndOrderManagementSystem.Models
     public class InventoryAdjustment
     {
         public int Id { get; set; }
-        int ProductId { get; set; }
+        public int ProductId { get; set; }
         [ForeignKey("ProductId")]
         public Product Product { get; set; }
         public int Quantity { get; set; }
         public DateTime Date { get; set; }
         public string Reason { get; set; }
-        string AdjustmentType { get; set; }
+        public string AdjustmentType { get; set; }
         public string PerformedBy { get; set; }
         
     }

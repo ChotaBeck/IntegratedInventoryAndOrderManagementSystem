@@ -8,5 +8,8 @@ namespace IntegratedInventoryAndOrderManagementSystem.Models
     public class Location : Base
     {
         
+    // Collection of Products
+    public virtual List<Product> Products { get; set; }
+        
     }
 }

@@ -1,196 +1,233 @@
-using System.Diagnostics;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using IntegratedInventoryAndOrderManagementSystem.Models;
-using IntegratedInventoryAndOrderManagementSystem.Services;
-using IntegratedInventoryAndOrderManagementSystem.Controllers;
-using IntegratedInventoryAndOrderManagementSystem.Models.ViewModel;
-using IntegratedInventoryAndOrderManagementSystem.Data;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authorization;
+using IntegratedInventoryAndOrderManagementSystem.Data;
+using IntegratedInventoryAndOrderManagementSystem.Models;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
-
-namespace IntegratedInventoryAndOrderManagementSystem.Controllers;
-
-
-public class PurchaseOrderController : Controller
+namespace IntegratedInventoryAndOrderManagementSystem.Controllers
 {
-    private readonly ILogger<PurchaseOrderController> _logger;
-    private readonly ApplicationDbContext _context;
+    public class PurchaseOrderController : Controller
+    {
+        private readonly ApplicationDbContext _context;
 
-    public PurchaseOrderController(ILogger<PurchaseOrderController> logger, ApplicationDbContext context)
-    {
-        _context = context;
-    }
-    //get
-    public IActionResult Create()
-    {
-        ViewBag.Statuses = new SelectList(_context.Statuses, "Id", "Name");
-        ViewBag.Products = new SelectList(_context.Products, "Id", "Name");
-    
-        var viewModel = new CreatePurchaseOrderViewModel
+        public PurchaseOrderController(ApplicationDbContext context)
         {
-            OrderDate = DateOnly.FromDateTime(DateTime.Today)
-        };
-        return View(viewModel);
-    }
+            _context = context;
+        }
 
-    //post
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public IActionResult Create(CreatePurchaseOrderViewModel model)
-    {
-        if (ModelState.IsValid)
-    {
-        var purchaseOrder = new PurchaseOrder
+        // GET: PurchaseOrder
+        public async Task<IActionResult> Index()
         {
-            Id = model.CustomerId,
-            OrderDate = model.OrderDate,
-            StatusId = model.StatusId,
-            PurchaseOrderItems = model.Items.Select(item => new PurchaseOrderItem
+            return View(await _context.PurchaseOrders.ToListAsync());
+        }
+
+        // GET: PurchaseOrder/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
             {
-                ProductId = item.ProductId,
-                Quantity = item.Quantity,
-                CostPrice = item.UnitPrice
-            }).ToList()
-        };
+                return NotFound();
+            }
 
-        // Calculate total cost
-        purchaseOrder.TotalCost = purchaseOrder.PurchaseOrderItems.Sum(item => item.Quantity * item.CostPrice);
+            var purchaseOrder = await _context.PurchaseOrders
+                .Include(p => p.Vendor)
+                .Include(p => p.Status)
+                .Include(p => p.PurchaseOrderItems)
+                .ThenInclude(poi => poi.Product)
+                .FirstOrDefaultAsync(m => m.Id == id);
 
-        // Save to database
-        _context.PurchaseOrders.Add(purchaseOrder);
-        _context.SaveChanges();
+            if (purchaseOrder == null)
+            {
+                return NotFound();
+            }
 
-        return RedirectToAction(nameof(Index));
-    }
-
-    return View(model);
-    }
-    
-
-    // INDEX
-    public async Task<IActionResult> Index()
-    {
-        var purchaseOrders = await _context.PurchaseOrders
-            .Include(po => po.Status)
-            .Include(po => po.PurchaseOrderItems)
-            .ToListAsync();
-        return View(purchaseOrders);
-    }
-
-    // DETAILS
-    public async Task<IActionResult> Details(int? id)
-    {
-        if (id == null)
-        {
-            return NotFound();
+            return View(purchaseOrder);
         }
 
-        var purchaseOrder = await _context.PurchaseOrders
-            .Include(po => po.Status)
-            .Include(po => po.PurchaseOrderItems)
-            .FirstOrDefaultAsync(po => po.Id == id);
-
-        if (purchaseOrder == null)
+        // GET: PurchaseOrder/Create
+        public IActionResult Create()
         {
-            return NotFound();
+            ViewBag.Vendors = new SelectList(_context.Vendors, "Id", "Name");
+            ViewBag.Statuses = new SelectList(_context.Statuses, "Id", "Name");
+            ViewBag.Products = new SelectList(_context.Products, "Id", "Name");
+            return View();
         }
 
-        return View(purchaseOrder);
-    }
-
-    // EDIT GET
-    public async Task<IActionResult> Edit(int? id)
-    {
-        if (id == null)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("VendorId,OrderDate,StatusId,TotalCost")] PurchaseOrder purchaseOrder, List<PurchaseOrderItem> purchaseOrderItems)
         {
-            return NotFound();
-        }
-
-        var purchaseOrder = await _context.PurchaseOrders
-            .Include(po => po.PurchaseOrderItems)
-            .FirstOrDefaultAsync(po => po.Id == id);
-
-        if (purchaseOrder == null)
+             // Remove the validation errors for Product and Status
+        ModelState.Remove("Vendor");
+        ModelState.Remove("Status");
+        ModelState.Remove("PurchaseOrderItems");
+        for(int i = 0; i < purchaseOrderItems.Count; i++)
         {
-            return NotFound();
+            ModelState.Remove($"PurchaseOrderItems[{i}].Product");
+            ModelState.Remove($"PurchaseOrderItems[{i}].PurchaseOrder");
         }
-
-        ViewBag.Statuses = new SelectList(_context.Statuses, "Id", "Name", purchaseOrder.StatusId);
-        return View(purchaseOrder);
-    }
-
-    // EDIT POST
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, PurchaseOrder purchaseOrder)
-    {
-        if (id != purchaseOrder.Id)
-        {
-            return NotFound();
-        }
+        
 
         if (ModelState.IsValid)
         {
-            try
-            {
-                _context.Update(purchaseOrder);
+          
+                // Set Product and Status to null to avoid issues
+                purchaseOrder.Vendor = null;
+                purchaseOrder.Status = null;
+                foreach (var item in purchaseOrderItems)
+                {
+                    item.Product = null;
+                    item.PurchaseOrder = null;
+                }
+
+                var purchaseOrderDBModel = new PurchaseOrder
+                {
+                    VendorId = purchaseOrder.VendorId,
+                    OrderDate = purchaseOrder.OrderDate,
+                    StatusId = purchaseOrder.StatusId,
+                    TotalCost = purchaseOrder.TotalCost
+                };
+                _context.Add(purchaseOrderDBModel);
                 await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
+
+                if (purchaseOrderItems != null && purchaseOrderItems.Any())
+                {
+                    foreach (var item in purchaseOrderItems)
+                    {
+                        var purchaseOrdeItemrDBModel = new PurchaseOrderItem
+                        {
+                            ProductId = item.ProductId,
+                            Quantity = item.Quantity,
+                            CostPrice = item.CostPrice,
+                            PurchaseOrderId = purchaseOrderDBModel.Id
+                        };
+                        item.PurchaseOrderId = purchaseOrderDBModel.Id;
+                        _context.PurchaseOrderItems.Add(item);
+                    }
+                    await _context.SaveChangesAsync();
+                }
+
+               
+                return RedirectToAction(nameof(Index));
+            
+        }
+
+            ViewBag.Vendors = new SelectList(_context.Vendors, "Id", "Name", purchaseOrder.VendorId);
+            ViewBag.Statuses = new SelectList(_context.Statuses, "Id", "Name", purchaseOrder.StatusId);
+            ViewBag.Products = new SelectList(_context.Products, "Id", "Name");
+            return View(purchaseOrder);
+        }
+
+       
+
+        // GET: PurchaseOrder/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
             {
-                if (!PurchaseOrderExists(purchaseOrder.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return NotFound();
             }
+
+            var purchaseOrder = await _context.PurchaseOrders
+                .Include(p => p.PurchaseOrderItems)
+                .ThenInclude(poi => poi.Product)
+                .Include(p => p.Vendor)
+                .Include(p => p.Status)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (purchaseOrder == null)
+            {
+                return NotFound();
+            }
+            ViewBag.VendorId = new SelectList(_context.Vendors, "Id", "Name", purchaseOrder.VendorId);
+            ViewBag.StatusId = new SelectList(_context.Statuses, "Id", "Name", purchaseOrder.StatusId);
+            ViewBag.Products = new SelectList(_context.Products, "Id", "Name");
+            return View(purchaseOrder);
+        }
+
+        // POST: PurchaseOrder/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,VendorId,OrderDate,StatusId,PurchaseOrderItems,TotalCost")] PurchaseOrder purchaseOrder)
+        {
+            if (id != purchaseOrder.Id)
+            {
+                return NotFound();
+            }
+            ModelState.Remove("Vendor");
+            ModelState.Remove("Status");
+            ModelState.Remove("PurchaseOrderItems");
+            for(int i = 0; i < purchaseOrder.PurchaseOrderItems.Count; i++)
+            {
+                ModelState.Remove($"PurchaseOrderItems[{i}].Product");
+                ModelState.Remove($"PurchaseOrderItems[{i}].PurchaseOrder");
+            }
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(purchaseOrder);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!PurchaseOrderExists(purchaseOrder.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            ViewBag.VendorId = new SelectList(_context.Vendors, "Id", "Name", purchaseOrder.VendorId);
+            ViewBag.StatusId = new SelectList(_context.Statuses, "Id", "Name", purchaseOrder.StatusId);
+            ViewBag.Products = new SelectList(_context.Products, "Id", "Name");
+            return View(purchaseOrder);
+        }
+
+        // GET: PurchaseOrder/Delete/5
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var purchaseOrder = await _context.PurchaseOrders
+                .Include(p => p.Vendor)
+                .Include(p => p.Status)
+                .Include(p => p.PurchaseOrderItems)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (purchaseOrder == null)
+            {
+                return NotFound();
+            }
+
+            return View(purchaseOrder);
+        }
+
+        // POST: PurchaseOrder/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var purchaseOrder = await _context.PurchaseOrders.FindAsync(id);
+            _context.PurchaseOrders.Remove(purchaseOrder);
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-        ViewBag.Statuses = new SelectList(_context.Statuses, "Id", "Name", purchaseOrder.StatusId);
-        return View(purchaseOrder);
-    }
 
-    // DELETE GET
-    public async Task<IActionResult> Delete(int? id)
-    {
-        if (id == null)
+        private bool PurchaseOrderExists(int id)
         {
-            return NotFound();
+            return _context.PurchaseOrders.Any(e => e.Id == id);
         }
-
-        var purchaseOrder = await _context.PurchaseOrders
-            .Include(po => po.Status)
-            .FirstOrDefaultAsync(po => po.Id == id);
-
-        if (purchaseOrder == null)
-        {
-            return NotFound();
-        }
-
-        return View(purchaseOrder);
-    }
-
-    // DELETE POST
-    [HttpPost, ActionName("Delete")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(int id)
-    {
-        var purchaseOrder = await _context.PurchaseOrders.FindAsync(id);
-        _context.PurchaseOrders.Remove(purchaseOrder);
-        await _context.SaveChangesAsync();
-        return RedirectToAction(nameof(Index));
-    }
-
-    private bool PurchaseOrderExists(int id)
-    {
-        return _context.PurchaseOrders.Any(e => e.Id == id);
     }
 }
-
-
-

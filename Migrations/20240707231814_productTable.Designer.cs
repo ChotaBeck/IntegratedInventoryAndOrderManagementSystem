@@ -3,6 +3,7 @@ using System;
 using IntegratedInventoryAndOrderManagementSystem.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IntegratedInventoryAndOrderManagementSystem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240707231814_productTable")]
+    partial class productTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.2");
@@ -85,40 +88,6 @@ namespace IntegratedInventoryAndOrderManagementSystem.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("Inventories");
-                });
-
-            modelBuilder.Entity("IntegratedInventoryAndOrderManagementSystem.Models.InventoryAdjustment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("AdjustmentType")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("PerformedBy")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Reason")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("InventoryAdjustments");
                 });
 
             modelBuilder.Entity("IntegratedInventoryAndOrderManagementSystem.Models.Location", b =>
@@ -594,17 +563,6 @@ namespace IntegratedInventoryAndOrderManagementSystem.Migrations
                         .IsRequired();
 
                     b.Navigation("Location");
-
-                    b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("IntegratedInventoryAndOrderManagementSystem.Models.InventoryAdjustment", b =>
-                {
-                    b.HasOne("IntegratedInventoryAndOrderManagementSystem.Models.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
 
                     b.Navigation("Product");
                 });

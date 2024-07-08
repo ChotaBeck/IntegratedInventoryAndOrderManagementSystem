@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace IntegratedInventoryAndOrderManagementSystem.Controllers;
 
-[Authorize(Roles = "Admin")]
 public class InventoryController : GenericController<Inventory>
 {
     private readonly ILogger<InventoryController> _logger;
@@ -20,15 +19,9 @@ public class InventoryController : GenericController<Inventory>
     {
         _context = context;
     }
-    //Get
+   
 
-    override public IActionResult Create()
-    {
-        
-        ViewBag.Products = new SelectList(_context.Set<Product>().ToList(), "Id", "Name");
-        ViewBag.Locations = new SelectList(_context.Set<Location>().ToList(), "Id", "Name");
-        return View();
-    }
+    
     override public IActionResult Index()
     {
         var inventories = _entity.GetAll();
@@ -39,20 +32,9 @@ public class InventoryController : GenericController<Inventory>
         }
        return View(inventories);
     }
-    override public IActionResult Edit(int id)
-    {
-        ViewBag.Products = new SelectList(_context.Set<Product>().ToList(), "Id", "Name");
-        ViewBag.Locations = new SelectList(_context.Set<Location>().ToList(), "Id", "Name");
-        return base.Edit(id);
-    }
+    
 
-    public override IActionResult Delete(int id)
-    {
-        ViewBag.Products = new SelectList(_context.Set<Product>().ToList(), "Id", "Name");
-        ViewBag.Locations = new SelectList(_context.Set<Location>().ToList(), "Id", "Name");
-        return base.Delete(id);
-    }
-
+    //Get
     public override IActionResult Details(int id)
     {
         var inventory = _entity.GetById(id);

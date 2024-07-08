@@ -1,65 +1,54 @@
-@model SalesOrderViewModel
-
-@{
-    ViewData["Title"] = "Create Sales Order";
-}
+@model SalesOrder
 
 <h2>Create Sales Order</h2>
 
-<form asp-action="Create">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<form asp-action="Create" method="post" id="salesOrderForm">
+    <div class="form-group">
+        <label asp-for="Name" class="control-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
 
     <div class="form-group">
-        <label asp-for="CustomerId" class="control-label"></label>
-        <input asp-for="CustomerId" class="form-control" />
-        <span asp-validation-for="CustomerId" class="text-danger"></span>
+        <label asp-for="PhoneNumber" class="control-label"></label>
+        <input asp-for="PhoneNumber" class="form-control" />
+        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Address" class="control-label"></label>
+        <input asp-for="Address" class="form-control" />
+        <span asp-validation-for="Address" class="text-danger"></span>
     </div>
 
     <div class="form-group">
         <label asp-for="OrderDate" class="control-label"></label>
-        <input asp-for="OrderDate" class="form-control" />
+        <input asp-for="OrderDate" class="form-control" type="date" />
         <span asp-validation-for="OrderDate" class="text-danger"></span>
     </div>
-    
+
     <div class="form-group">
-        <label asp-for="StatusId" class="control-label"></label>
+        <label asp-for="StatusId" class="control-label">Status</label>
         <select asp-for="StatusId" class="form-control" asp-items="ViewBag.Statuses"></select>
         <span asp-validation-for="StatusId" class="text-danger"></span>
     </div>
 
-    <div class="form-group">
-        <label asp-for="isPaid" class="control-label"></label>
-        <input asp-for="isPaid" class="form-control" />
-        <span asp-validation-for="isPaid" class="text-danger"></span>
+    <h3>Sales Order Items</h3>
+    <div id="sales-order-items">
+        <!-- This section will be populated dynamically with JavaScript -->
     </div>
+    <button type="button" id="add-item" class="btn btn-secondary">Add Item</button>
 
     <div class="form-group">
-        <label>Items</label>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Product</th>
-                    <th>Quantity</th>
-                    <th>Selling Price</th>
-                </tr>
-            </thead>
-            <tbody>
-                @for (int i = 0; i < Model.SalesOrderItems.Count; i++)
-                {
-                    <tr>
-                        <td>
-                            <select asp-for="@Model.SalesOrderItems[i].ProductId" class="form-control" asp-items="ViewBag.Products"></select>
-                        </td>
-                        <td>
-                            <input asp-for="@Model.SalesOrderItems[i].Quantity" class="form-control" />
-                        </td>
-                        <td>
-                            <input asp-for="@Model.SalesOrderItems[i].SellingPrice" class="form-control" />
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+        <label asp-for="TotalCost" class="control-label"></label>
+        <input asp-for="TotalCost" class="form-control" readonly />
+        <span asp-validation-for="TotalCost" class="text-danger"></span>
+    </div>
+
+    <div class="form-group form-check">
+        <label class="form-check-label">
+            <input class="form-check-input" asp-for="isPaid" /> @Html.DisplayNameFor(model => model.isPaid)
+        </label>
     </div>
 
     <div class="form-group">
@@ -73,4 +62,62 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        let itemCount = 0;
+
+        function addItem() {
+            const itemsContainer = document.getElementById('sales-order-items');
+            const newItem = document.createElement('div');
+            newItem.innerHTML = `
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label>Product</label>
+                        <select name="SalesOrderItems[${itemCount}].ProductId" class="form-control product-select" required>
+                            <option value="">Select a product</option>
+                            @foreach (var product in ViewBag.Products)
+                            {
+                                <option value="@product.Value">@product.Text</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label>Quantity</label>
+                        <input type="number" name="SalesOrderItems[${itemCount}].Quantity" class="form-control quantity-input" required min="1" />
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label>Unit Price</label>
+                        <input type="number" name="SalesOrderItems[${itemCount}].UnitPrice" class="form-control unit-price-input" required min="0" step="0.01" />
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>&nbsp;</label>
+                        <button type="button" class="btn btn-danger form-control remove-item">Remove</button>
+                    </div>
+                </div>
+            `;
+            itemsContainer.appendChild(newItem);
+            itemCount++;
+            
+            newItem.querySelector('.remove-item').addEventListener('click', function() {
+                itemsContainer.removeChild(newItem);
+                updateTotalCost();
+            });
+            
+            newItem.querySelector('.quantity-input').addEventListener('input', updateTotalCost);
+            newItem.querySelector('.unit-price-input').addEventListener('input', updateTotalCost);
+        }
+
+        function updateTotalCost() {
+            let total = 0;
+            const items = document.querySelectorAll('#sales-order-items .form-row');
+            items.forEach(item => {
+                const quantity = parseFloat(item.querySelector('.quantity-input').value) || 0;
+                const unitPrice = parseFloat(item.querySelector('.unit-price-input').value) || 0;
+                total += quantity * unitPrice;
+            });
+            document.getElementById('TotalCost').value = total.toFixed(2);
+        }
+
+        document.getElementById('add-item').addEventListener('click', addItem);
+    </script>
 }

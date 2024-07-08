@@ -7,35 +7,35 @@
 <h2>Edit Vendor</h2>
 
 <form asp-action="Edit">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input type="hidden" asp-for="Id" />
-    
     <div class="form-group">
         <label asp-for="Name" class="control-label"></label>
         <input asp-for="Name" class="form-control" />
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
-    
-    
     <div class="form-group">
         <label asp-for="Email" class="control-label"></label>
-        <input asp-for="Email" class="form-control" type="email" />
+        <input asp-for="Email" class="form-control" />
         <span asp-validation-for="Email" class="text-danger"></span>
     </div>
-    
     <div class="form-group">
         <label asp-for="PhoneNumber" class="control-label"></label>
         <input asp-for="PhoneNumber" class="form-control" />
         <span asp-validation-for="PhoneNumber" class="text-danger"></span>
     </div>
-    
     <div class="form-group">
         <label asp-for="Address" class="control-label"></label>
-        <textarea asp-for="Address" class="form-control" rows="3"></textarea>
+        <input asp-for="Address" class="form-control" />
         <span asp-validation-for="Address" class="text-danger"></span>
     </div>
+     <div class="form-group">
+        <label asp-for="ProductSupplying" class="control-label"></label>
+        <input asp-for="ProductSupplying" class="form-control" />
+        <span asp-validation-for="ProductSupplying" class="text-danger"></span>
+    </div>
     
-    <div class="form-group">
+
+    <div class="form-group mt-3">
         <input type="submit" value="Save" class="btn btn-primary" />
     </div>
 </form>
@@ -46,4 +46,5 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+  
 }
