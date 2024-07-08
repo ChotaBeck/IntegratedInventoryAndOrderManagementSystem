@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,9 +12,11 @@ namespace IntegratedInventoryAndOrderManagementSystem.Models
             public string Description { get; set; }
             public string SKU { get; set; }
             public double Cost { get; set; }
-            public int LocationId { get; set; }
+            [Required]
             [ForeignKey("LocationId")]
-            public Location location {get;set;}
+            public int LocationId { get; set; }
+            
+            
             public decimal Price { get; set; }
             public int Quantity { get; set; }
             public DateTime LastRestockDate { get; set; }

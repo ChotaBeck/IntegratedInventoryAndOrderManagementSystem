@@ -11,7 +11,8 @@ namespace IntegratedInventoryAndOrderManagementSystem.Models
         public int Id { get; set; }
         public int VendorId { get; set; }
         [ForeignKey("VendorId")]
-        public Vendor Vendor { get; set; }
+        public Vendor Vendor {get; set;}
+        
         public DateOnly OrderDate { get; set; }
         public int StatusId { get; set; }
         [ForeignKey("StatusId")]

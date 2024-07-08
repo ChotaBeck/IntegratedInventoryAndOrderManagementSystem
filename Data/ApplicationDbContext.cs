@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace IntegratedInventoryAndOrderManagementSystem.Data;
 
-public class ApplicationDbContext : IdentityDbContext
+public class ApplicationDbContext : IdentityDbContext<IdentityUser>
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
@@ -18,9 +18,21 @@ public class ApplicationDbContext : IdentityDbContext
     public DbSet<Status> Statuses { get; set; }
     public DbSet<Vendor> Vendors { get; set; }
     public DbSet<Inventory> Inventories { get; set; }
+    public DbSet<InventoryAdjustment> InventoryAdjustments { get; set; }
     public DbSet<Location> Locations { get; set; }
     public DbSet<Shipment> Shipments { get; set; }
     public DbSet<SalesOrder> SalesOrders { get; set; }
     public DbSet<SalesOrderItem> SalesOrderItems { get; set; }
     public DbSet<Department> Departments { get; set; }
+
+    // protected override void OnModelCreating(ModelBuilder builder)
+    // {
+    //     base.OnModelCreating(builder);
+
+    //     var admin = new IdentityRole("admin");
+    //     admin.NormalizedName = "admin";
+
+    //     builder.Entity<IdentityRole>().HasData(admin);
+    // }
+
 }

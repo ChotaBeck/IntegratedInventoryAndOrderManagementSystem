@@ -8,51 +8,57 @@
 
 <form asp-action="Edit">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
     <input type="hidden" asp-for="Id" />
     
     <div class="form-group">
-        <label asp-for="OrderDate" class="control-label"></label>
-        <input asp-for="OrderDate" class="form-control" />
+        <label asp-for="VendorId" class="control-label">Vendor</label>
+        <select asp-for="VendorId" class="form-control" asp-items="ViewBag.VendorId"></select>
+        <span asp-validation-for="VendorId" class="text-danger"></span>
+    </div>
+    
+    <div class="form-group">
+        <label asp-for="OrderDate" class="control-label">Order Date</label>
+        <input asp-for="OrderDate" class="form-control" type="date" />
         <span asp-validation-for="OrderDate" class="text-danger"></span>
     </div>
     
     <div class="form-group">
-        <label asp-for="StatusId" class="control-label"></label>
-        <select asp-for="StatusId" class="form-control" asp-items="ViewBag.Statuses"></select>
+        <label asp-for="StatusId" class="control-label">Status</label>
+        <select asp-for="StatusId" class="form-control" asp-items="ViewBag.StatusId"></select>
         <span asp-validation-for="StatusId" class="text-danger"></span>
     </div>
-
-    <div class="form-group">
-        <label>Items</label>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Product</th>
-                    <th>Quantity</th>
-                    <th>Unit Price</th>
-                </tr>
-            </thead>
-            <tbody>
-                @for (int i = 0; i < Model.PurchaseOrderItems.Count; i++)
-                {
-                    <tr>
-                        <td>
-                            <select asp-for="@Model.PurchaseOrderItems[i].ProductId" class="form-control" asp-items="ViewBag.Products"></select>
-                        </td>
-                        <td>
-                            <input asp-for="@Model.PurchaseOrderItems[i].Quantity" class="form-control" />
-                        </td>
-                        <td>
-                            <input asp-for="@Model.PurchaseOrderItems[i].CostPrice" class="form-control" />
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+    
+    <h4>Purchase Order Items</h4>
+    <div id="purchaseOrderItems">
+        @for (int i = 0; i < Model.PurchaseOrderItems.Count; i++)
+        {
+            <div class="row mt-2">
+                <input type="hidden" asp-for="PurchaseOrderItems[i].Id" />
+                <div class="col">
+                    <select asp-for="PurchaseOrderItems[i].ProductId" class="form-control product-select" asp-items="ViewBag.Products" required></select>
+                </div>
+                <div class="col">
+                    <input asp-for="PurchaseOrderItems[i].Quantity" class="form-control quantity-input" placeholder="Quantity" required min="1" />
+                </div>
+                <div class="col">
+                    <input asp-for="PurchaseOrderItems[i].CostPrice" class="form-control unit-cost-input" placeholder="Unit Cost" required min="0" step="0.01" />
+                </div>
+             
+                <div class="col">
+                    <button type="button" class="btn btn-danger removeItem">Remove</button>
+                </div>
+            </div>
+        }
     </div>
-
+    <button type="button" id="addItem" class="btn btn-secondary mt-2">Add Item</button>
+    
     <div class="form-group">
+        <label asp-for="TotalCost" class="control-label">Total Cost</label>
+        <input asp-for="TotalCost" class="form-control" readonly />
+        <span asp-validation-for="TotalCost" class="text-danger"></span>
+    </div>
+    
+    <div class="form-group mt-3">
         <input type="submit" value="Save" class="btn btn-primary" />
     </div>
 </form>
@@ -63,4 +69,68 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $(document).ready(function() {
+            let itemCount = @Model.PurchaseOrderItems.Count;
+
+            $("#addItem").click(function() {
+                let newRow = `
+                    <div class="row mt-2">
+                        <input type="hidden" name="PurchaseOrderItems[${itemCount}].Id" value="0" />
+                        <div class="col">
+                            <select name="PurchaseOrderItems[${itemCount}].ProductId" class="form-control product-select" required>
+                                @foreach (var item in ViewBag.Products)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col">
+                            <input type="number" name="PurchaseOrderItems[${itemCount}].Quantity" class="form-control quantity-input" placeholder="Quantity" required min="1" />
+                        </div>
+                        <div class="col">
+                            <input type="number" name="PurchaseOrderItems[${itemCount}].UnitCost" class="form-control unit-cost-input" placeholder="Unit Cost" required min="0" step="0.01" />
+                        </div>
+                        <div class="col">
+                            <input type="number" name="PurchaseOrderItems[${itemCount}].TotalCost" class="form-control item-total-cost" readonly />
+                        </div>
+                        <div class="col">
+                            <button type="button" class="btn btn-danger removeItem">Remove</button>
+                        </div>
+                    </div>
+                `;
+                $("#purchaseOrderItems").append(newRow);
+                itemCount++;
+                updateTotalCost();
+            });
+
+            $(document).on("click", ".removeItem", function() {
+                $(this).closest(".row").remove();
+                updateTotalCost();
+            });
+
+            $(document).on("change", ".quantity-input, .unit-cost-input", function() {
+                updateItemTotalCost($(this).closest(".row"));
+                updateTotalCost();
+            });
+
+            function updateItemTotalCost(row) {
+                let quantity = parseFloat(row.find(".quantity-input").val()) || 0;
+                let unitCost = parseFloat(row.find(".unit-cost-input").val()) || 0;
+                let totalCost = quantity * unitCost;
+                row.find(".item-total-cost").val(totalCost.toFixed(2));
+            }
+
+            function updateTotalCost() {
+                let total = 0;
+                $(".item-total-cost").each(function() {
+                    total += parseFloat($(this).val()) || 0;
+                });
+                $("#TotalCost").val(total.toFixed(2));
+            }
+
+            // Initial update
+            updateTotalCost();
+        });
+    </script>
 }

@@ -1,4 +1,4 @@
-@model Product
+@model ProductViewModel
 
 @{
     ViewData["Title"] = "Product Details";
@@ -7,36 +7,67 @@
 <h2>Product Details</h2>
 
 <div>
+    <h4>Product</h4>
+    <hr />
     <dl class="row">
-        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Name)</dt>
-        <dd class="col-sm-9">@Html.DisplayFor(model => model.Name)</dd>
-
-        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Description)</dt>
-        <dd class="col-sm-9">@Html.DisplayFor(model => model.Description)</dd>
-
-        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.SKU)</dt>
-        <dd class="col-sm-9">@Html.DisplayFor(model => model.SKU)</dd>
-
-        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Cost)</dt>
-        <dd class="col-sm-9">@Html.DisplayFor(model => model.Cost)</dd>
-
-        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Price)</dt>
-        <dd class="col-sm-9">@Html.DisplayFor(model => model.Price)</dd>
-
-        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Quantity)</dt>
-        <dd class="col-sm-9">@Html.DisplayFor(model => model.Quantity)</dd>
-
-        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.LastRestockDate)</dt>
-        <dd class="col-sm-9">@Html.DisplayFor(model => model.LastRestockDate)</dd>
-
-        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.ReorderThreshold)</dt>
-        <dd class="col-sm-9">@Html.DisplayFor(model => model.ReorderThreshold)</dd>
-
-        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.location)</dt>
-        <dd class="col-sm-9">@Html.DisplayFor(model => model.location.Name)</dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SKU)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SKU)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Cost)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Cost)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Quantity)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Quantity)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.LastRestockDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.LastRestockDate)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ReorderThreshold)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ReorderThreshold)
+        </dd>
+        <dt class="col-sm-2">
+            Location
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Location.Name)
+        </dd>
     </dl>
 </div>
+
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a> |
-    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
 </div>

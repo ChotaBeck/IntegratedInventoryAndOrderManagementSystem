@@ -9,7 +9,9 @@ namespace IntegratedInventoryAndOrderManagementSystem.Models
     public class SalesOrder
     {
         public int Id { get; set; }
-        public int CustomerId { get; set; }
+        public string Name { get; set; }
+        public int PhoneNumber { get; set; }
+        public string Address { get; set; }
         public DateOnly OrderDate { get; set; }
         public int StatusId { get; set; }
         [ForeignKey("StatusId")]
@@ -18,7 +20,7 @@ namespace IntegratedInventoryAndOrderManagementSystem.Models
         public bool isPaid { get; set; } = false;
         public decimal TotalCost { get; set; }
         public DateTime? ShipDate { get; set; }
-        public string TrackingNumber { get; set; }
+        public string? TrackingNumber { get; set; }
 
     }
 }

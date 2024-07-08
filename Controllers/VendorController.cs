@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Authorization;
 namespace IntegratedInventoryAndOrderManagementSystem.Controllers;
 
 
-[Authorize(Roles = "Admin")]
 public class VendorController : GenericController<Vendor>
 {
     private readonly ILogger<VendorController> _logger;
