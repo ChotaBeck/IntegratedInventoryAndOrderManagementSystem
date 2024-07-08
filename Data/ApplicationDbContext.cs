@@ -24,6 +24,7 @@ public class ApplicationDbContext : IdentityDbContext<IdentityUser>
     public DbSet<SalesOrder> SalesOrders { get; set; }
     public DbSet<SalesOrderItem> SalesOrderItems { get; set; }
     public DbSet<Department> Departments { get; set; }
+    public DbSet<Invoice> Invoices { get; set; }
 
     // protected override void OnModelCreating(ModelBuilder builder)
     // {

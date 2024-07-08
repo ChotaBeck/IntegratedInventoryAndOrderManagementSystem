@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using IntegratedInventoryAndOrderManagementSystem.Models;
 using IntegratedInventoryAndOrderManagementSystem.Data;
+using IntegratedInventoryAndOrderManagementSystem.Services;
 
 namespace IntegratedInventoryAndOrderManagementSystem.Controllers
 {
@@ -69,8 +70,10 @@ namespace IntegratedInventoryAndOrderManagementSystem.Controllers
                         }
                         await _context.SaveChangesAsync();
                     }
-
+                   
                     await transaction.CommitAsync();
+
+                    
                     return RedirectToAction(nameof(Index));
                 }
                 catch (Exception)
