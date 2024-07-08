@@ -3,10 +3,56 @@
 }
 
 <div class="text-center">
-    <a asp-controller="Customer" asp-action="Index" class="btn btn-landing btn-customer">
-        <i class="fas fa-user mr-2"></i> Customer Portal
-    </a>
-    <a asp-controller="Admin" asp-action="Index" class="btn btn-landing btn-admin">
-        <i class="fas fa-user-shield mr-2"></i> Admin Portal
-    </a>
+    <div>
+    <div>
+        <h1>Welcome to Inventory Management System</h1>
+    </div>
 </div>
+
+<div class="container counter-section">
+    <div class="row">
+        <div class="col-md-3 mb-4">
+            <i class="fas fa-box icon"></i>
+            <div class="counter" id="product-count" data-count="12">0</div>
+            <div class="counter-title">Products</div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <i class="fas fa-shopping-cart icon"></i>
+            <div class="counter" id="order-count" data-count="100">0</div>
+            <div class="counter-title">Orders</div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <i class="fas fa-truck icon"></i>
+            <div class="counter" id="shipment-count" data-count="134">0</div>
+            <div class="counter-title">Shipments</div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <i class="fas fa-user icon"></i>
+            <div class="counter" id="customer-count" data-count="23">0</div>
+            <div class="counter-title">Customers</div>
+        </div>
+    </div>
+</div>
+       <p>Managing inventory efficiently.</p>
+ 
+</div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Counter-Up/1.0.0/jquery.counterup.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.counter').each(function () {
+                $(this).prop('Counter', 0).animate({
+                    Counter: $(this).data('count')
+                }, {
+                    duration: 2000,
+                    easing: 'swing',
+                    step: function (now) {
+                        $(this).text(Math.ceil(now));
+                    }
+                });
+            });
+        });
+    </script>
+}

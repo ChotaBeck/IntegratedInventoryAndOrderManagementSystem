@@ -11,6 +11,7 @@ public class ApplicationDbContext : IdentityDbContext
         : base(options)
     {
     }
+    
     public DbSet<Customer> Customers { get; set; }
     public DbSet<Product> Products { get; set; }
     public DbSet<PurchaseOrder> PurchaseOrders { get; set; }
