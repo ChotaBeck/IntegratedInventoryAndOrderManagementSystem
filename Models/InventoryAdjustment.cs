@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,8 +16,18 @@ namespace IntegratedInventoryAndOrderManagementSystem.Models
         public int Quantity { get; set; }
         public DateTime Date { get; set; }
         public string Reason { get; set; }
-        public string AdjustmentType { get; set; }
+        [Required]
+        public AdjustmentType AdjustmentType { get; set; }
         public string PerformedBy { get; set; }
         
+    }
+    public enum AdjustmentType
+    {
+        NewProducts,
+        ReturnedOrders,
+        CancelledOrders,
+        StockTake,
+        DamagedProducts, 
+        OrderFullfillment
     }
 }

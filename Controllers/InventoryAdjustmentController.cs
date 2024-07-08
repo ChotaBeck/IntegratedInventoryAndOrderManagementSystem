@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using IntegratedInventoryAndOrderManagementSystem.Data;
 using IntegratedInventoryAndOrderManagementSystem.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,12 +15,14 @@ public class InventoryAdjustmentController : Controller
     public InventoryAdjustmentController(ApplicationDbContext context)
     {
         _context = context;
+        
     }
 
     // GET: InventoryAdjustment/Create
     public IActionResult Create()
     {
         ViewBag.Products = _context.Products.ToList();
+        ViewBag.AdjustmentTypes = Enum.GetValues(typeof(AdjustmentType)).Cast<AdjustmentType>().ToList();
         return View();
     }
 
@@ -33,6 +36,8 @@ public class InventoryAdjustmentController : Controller
         if (ModelState.IsValid)
         {
             inventoryAdjustment.Date = DateTime.Now;
+            // var user = await _userManager.GetUserAsync(User);
+            // inventoryAdjustment.PerformedBy = user.UserName;
             _context.Add(inventoryAdjustment);
 
             // Adjust the inventory
@@ -41,17 +46,39 @@ public class InventoryAdjustmentController : Controller
 
             if (inventory == null)
             {
-                return NotFound();
+                inventory = new Inventory
+                {
+                    ProductId = inventoryAdjustment.ProductId,
+                    Quantity = 0
+                };
+                _context.Inventories.Add(inventory);
             }
-            else
+            switch (inventoryAdjustment.AdjustmentType)
             {
-                // Update existing inventory
-                inventory.Quantity = inventoryAdjustment.Quantity;
+                case AdjustmentType.NewProducts:
+                    inventory.Quantity += inventoryAdjustment.Quantity;
+                    break;
+                case AdjustmentType.ReturnedOrders:
+                    inventory.Quantity += inventoryAdjustment.Quantity;
+                    break;
+                case AdjustmentType.CancelledOrders:
+                    inventory.Quantity += inventoryAdjustment.Quantity;
+                    break;
+                case AdjustmentType.StockTake:
+                    inventory.Quantity = inventoryAdjustment.Quantity;
+                    break;
+                case AdjustmentType.DamagedProducts:
+                    inventory.Quantity -= inventoryAdjustment.Quantity;
+                    break;
+                case AdjustmentType.OrderFullfillment:
+                    inventory.Quantity -= inventoryAdjustment.Quantity;
+                    break;
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+        ViewBag.AdjustmentTypes = Enum.GetValues(typeof(AdjustmentType)).Cast<AdjustmentType>().ToList();
         ViewBag.Products = _context.Products.ToList();
         return View(inventoryAdjustment);
     }

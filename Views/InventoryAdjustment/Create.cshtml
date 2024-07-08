@@ -19,10 +19,10 @@
     </div>
     <div class="form-group">
         <label asp-for="AdjustmentType" class="control-label"></label>
-        <input asp-for="AdjustmentType" class="form-control" />
+        <select asp-for="AdjustmentType" class="form-control" asp-items="@(new SelectList(ViewBag.AdjustmentTypes))"></select>
         <span asp-validation-for="AdjustmentType" class="text-danger"></span>
     </div>
-    <div class="form-group">
+     <div class="form-group">
         <label asp-for="PerformedBy" class="control-label"></label>
         <input asp-for="PerformedBy" class="form-control" />
         <span asp-validation-for="PerformedBy" class="text-danger"></span>
