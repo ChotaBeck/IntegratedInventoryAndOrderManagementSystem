@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IntegratedInventoryAndOrderManagementSystem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240705133507_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240708095055_initialmigration")]
+    partial class initialmigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -51,13 +51,28 @@ namespace IntegratedInventoryAndOrderManagementSystem.Migrations
                     b.ToTable("Customers");
                 });
 
+            modelBuilder.Entity("IntegratedInventoryAndOrderManagementSystem.Models.Department", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Departments");
+                });
+
             modelBuilder.Entity("IntegratedInventoryAndOrderManagementSystem.Models.Inventory", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("LocationId")
+                    b.Property<int?>("LocationId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("ProductId")
@@ -73,6 +88,39 @@ namespace IntegratedInventoryAndOrderManagementSystem.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("Inventories");
+                });
+
+            modelBuilder.Entity("IntegratedInventoryAndOrderManagementSystem.Models.InventoryAdjustment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("AdjustmentType")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PerformedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("InventoryAdjustments");
                 });
 
             modelBuilder.Entity("IntegratedInventoryAndOrderManagementSystem.Models.Location", b =>
@@ -126,14 +174,9 @@ namespace IntegratedInventoryAndOrderManagementSystem.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("VendorId")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("Id");
 
                     b.HasIndex("LocationId");
-
-                    b.HasIndex("VendorId");
 
                     b.ToTable("Products");
                 });
@@ -198,11 +241,19 @@ namespace IntegratedInventoryAndOrderManagementSystem.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<DateOnly>("OrderDate")
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("PhoneNumber")
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("ShipDate")
                         .HasColumnType("TEXT");
@@ -214,7 +265,6 @@ namespace IntegratedInventoryAndOrderManagementSystem.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("TrackingNumber")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("isPaid")
@@ -323,6 +373,10 @@ namespace IntegratedInventoryAndOrderManagementSystem.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ProductSupplying")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -531,9 +585,7 @@ namespace IntegratedInventoryAndOrderManagementSystem.Migrations
                 {
                     b.HasOne("IntegratedInventoryAndOrderManagementSystem.Models.Location", "Location")
                         .WithMany()
-                        .HasForeignKey("LocationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("LocationId");
 
                     b.HasOne("IntegratedInventoryAndOrderManagementSystem.Models.Product", "Product")
                         .WithMany()
@@ -546,19 +598,24 @@ namespace IntegratedInventoryAndOrderManagementSystem.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("IntegratedInventoryAndOrderManagementSystem.Models.Product", b =>
+            modelBuilder.Entity("IntegratedInventoryAndOrderManagementSystem.Models.InventoryAdjustment", b =>
                 {
-                    b.HasOne("IntegratedInventoryAndOrderManagementSystem.Models.Location", "location")
+                    b.HasOne("IntegratedInventoryAndOrderManagementSystem.Models.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("LocationId")
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("IntegratedInventoryAndOrderManagementSystem.Models.Vendor", null)
-                        .WithMany("ProductSupplying")
-                        .HasForeignKey("VendorId");
+                    b.Navigation("Product");
+                });
 
-                    b.Navigation("location");
+            modelBuilder.Entity("IntegratedInventoryAndOrderManagementSystem.Models.Product", b =>
+                {
+                    b.HasOne("IntegratedInventoryAndOrderManagementSystem.Models.Location", null)
+                        .WithMany("Products")
+                        .HasForeignKey("LocationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("IntegratedInventoryAndOrderManagementSystem.Models.PurchaseOrder", b =>
@@ -699,6 +756,11 @@ namespace IntegratedInventoryAndOrderManagementSystem.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("IntegratedInventoryAndOrderManagementSystem.Models.Location", b =>
+                {
+                    b.Navigation("Products");
+                });
+
             modelBuilder.Entity("IntegratedInventoryAndOrderManagementSystem.Models.PurchaseOrder", b =>
                 {
                     b.Navigation("PurchaseOrderItems");
@@ -707,11 +769,6 @@ namespace IntegratedInventoryAndOrderManagementSystem.Migrations
             modelBuilder.Entity("IntegratedInventoryAndOrderManagementSystem.Models.SalesOrder", b =>
                 {
                     b.Navigation("SalesOrderItems");
-                });
-
-            modelBuilder.Entity("IntegratedInventoryAndOrderManagementSystem.Models.Vendor", b =>
-                {
-                    b.Navigation("ProductSupplying");
                 });
 #pragma warning restore 612, 618
         }

@@ -15,7 +15,7 @@ namespace IntegratedInventoryAndOrderManagementSystem.Models
         public int ProductId { get; set; }
         [ForeignKey("ProductId")]
         public Product Product { get; set; }
-        public int LocationId { get; set; }
+        public int? LocationId { get; set; }
         [ForeignKey("LocationId")]
         public Location Location { get; set; }
         public int Quantity { get; set; }

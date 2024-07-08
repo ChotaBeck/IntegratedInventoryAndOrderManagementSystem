@@ -11,6 +11,6 @@ namespace IntegratedInventoryAndOrderManagementSystem.Models
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
         public string Address { get; set; }
-        public List<Product> ProductSupplying { get; set; }
+        public string ProductSupplying { get; set; }
     }
 }

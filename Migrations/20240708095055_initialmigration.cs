@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace IntegratedInventoryAndOrderManagementSystem.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class initialmigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -68,6 +68,19 @@ namespace IntegratedInventoryAndOrderManagementSystem.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Departments",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Departments", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Locations",
                 columns: table => new
                 {
@@ -102,6 +115,7 @@ namespace IntegratedInventoryAndOrderManagementSystem.Migrations
                     Email = table.Column<string>(type: "TEXT", nullable: false),
                     PhoneNumber = table.Column<string>(type: "TEXT", nullable: false),
                     Address = table.Column<string>(type: "TEXT", nullable: false),
+                    ProductSupplying = table.Column<string>(type: "TEXT", nullable: false),
                     Name = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
@@ -216,31 +230,6 @@ namespace IntegratedInventoryAndOrderManagementSystem.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SalesOrders",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    CustomerId = table.Column<int>(type: "INTEGER", nullable: false),
-                    OrderDate = table.Column<DateOnly>(type: "TEXT", nullable: false),
-                    StatusId = table.Column<int>(type: "INTEGER", nullable: false),
-                    isPaid = table.Column<bool>(type: "INTEGER", nullable: false),
-                    TotalCost = table.Column<decimal>(type: "TEXT", nullable: false),
-                    ShipDate = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    TrackingNumber = table.Column<string>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SalesOrders", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_SalesOrders_Statuses_StatusId",
-                        column: x => x.StatusId,
-                        principalTable: "Statuses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Products",
                 columns: table => new
                 {
@@ -254,7 +243,6 @@ namespace IntegratedInventoryAndOrderManagementSystem.Migrations
                     Quantity = table.Column<int>(type: "INTEGER", nullable: false),
                     LastRestockDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     ReorderThreshold = table.Column<int>(type: "INTEGER", nullable: false),
-                    VendorId = table.Column<int>(type: "INTEGER", nullable: true),
                     Name = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
@@ -266,11 +254,33 @@ namespace IntegratedInventoryAndOrderManagementSystem.Migrations
                         principalTable: "Locations",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SalesOrders",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    PhoneNumber = table.Column<int>(type: "INTEGER", nullable: false),
+                    Address = table.Column<string>(type: "TEXT", nullable: false),
+                    OrderDate = table.Column<DateOnly>(type: "TEXT", nullable: false),
+                    StatusId = table.Column<int>(type: "INTEGER", nullable: false),
+                    isPaid = table.Column<bool>(type: "INTEGER", nullable: false),
+                    TotalCost = table.Column<decimal>(type: "TEXT", nullable: false),
+                    ShipDate = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    TrackingNumber = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SalesOrders", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Products_Vendors_VendorId",
-                        column: x => x.VendorId,
-                        principalTable: "Vendors",
-                        principalColumn: "Id");
+                        name: "FK_SalesOrders_Statuses_StatusId",
+                        column: x => x.StatusId,
+                        principalTable: "Statuses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -302,43 +312,13 @@ namespace IntegratedInventoryAndOrderManagementSystem.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Shipments",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    SalesOrderId = table.Column<int>(type: "INTEGER", nullable: false),
-                    ShippingDate = table.Column<DateOnly>(type: "TEXT", nullable: false),
-                    TrackingNumber = table.Column<string>(type: "TEXT", nullable: false),
-                    ShippingCarrier = table.Column<string>(type: "TEXT", nullable: false),
-                    ShippingCost = table.Column<decimal>(type: "TEXT", nullable: false),
-                    StatusId = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Shipments", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Shipments_SalesOrders_SalesOrderId",
-                        column: x => x.SalesOrderId,
-                        principalTable: "SalesOrders",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Shipments_Statuses_StatusId",
-                        column: x => x.StatusId,
-                        principalTable: "Statuses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Inventories",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     ProductId = table.Column<int>(type: "INTEGER", nullable: false),
-                    LocationId = table.Column<int>(type: "INTEGER", nullable: false),
+                    LocationId = table.Column<int>(type: "INTEGER", nullable: true),
                     Quantity = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
@@ -348,10 +328,33 @@ namespace IntegratedInventoryAndOrderManagementSystem.Migrations
                         name: "FK_Inventories_Locations_LocationId",
                         column: x => x.LocationId,
                         principalTable: "Locations",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Inventories_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "InventoryAdjustments",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    ProductId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Quantity = table.Column<int>(type: "INTEGER", nullable: false),
+                    Date = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Reason = table.Column<string>(type: "TEXT", nullable: false),
+                    AdjustmentType = table.Column<int>(type: "INTEGER", nullable: false),
+                    PerformedBy = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_InventoryAdjustments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_InventoryAdjustments_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "Id",
@@ -382,6 +385,36 @@ namespace IntegratedInventoryAndOrderManagementSystem.Migrations
                         name: "FK_SalesOrderItems_SalesOrders_SalesOrderId",
                         column: x => x.SalesOrderId,
                         principalTable: "SalesOrders",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Shipments",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    SalesOrderId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ShippingDate = table.Column<DateOnly>(type: "TEXT", nullable: false),
+                    TrackingNumber = table.Column<string>(type: "TEXT", nullable: false),
+                    ShippingCarrier = table.Column<string>(type: "TEXT", nullable: false),
+                    ShippingCost = table.Column<decimal>(type: "TEXT", nullable: false),
+                    StatusId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Shipments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Shipments_SalesOrders_SalesOrderId",
+                        column: x => x.SalesOrderId,
+                        principalTable: "SalesOrders",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Shipments_Statuses_StatusId",
+                        column: x => x.StatusId,
+                        principalTable: "Statuses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -462,14 +495,14 @@ namespace IntegratedInventoryAndOrderManagementSystem.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_InventoryAdjustments_ProductId",
+                table: "InventoryAdjustments",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Products_LocationId",
                 table: "Products",
                 column: "LocationId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Products_VendorId",
-                table: "Products",
-                column: "VendorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PurchaseOrderItems_ProductId",
@@ -539,7 +572,13 @@ namespace IntegratedInventoryAndOrderManagementSystem.Migrations
                 name: "Customers");
 
             migrationBuilder.DropTable(
+                name: "Departments");
+
+            migrationBuilder.DropTable(
                 name: "Inventories");
+
+            migrationBuilder.DropTable(
+                name: "InventoryAdjustments");
 
             migrationBuilder.DropTable(
                 name: "PurchaseOrderItems");
@@ -566,10 +605,10 @@ namespace IntegratedInventoryAndOrderManagementSystem.Migrations
                 name: "SalesOrders");
 
             migrationBuilder.DropTable(
-                name: "Locations");
+                name: "Vendors");
 
             migrationBuilder.DropTable(
-                name: "Vendors");
+                name: "Locations");
 
             migrationBuilder.DropTable(
                 name: "Statuses");

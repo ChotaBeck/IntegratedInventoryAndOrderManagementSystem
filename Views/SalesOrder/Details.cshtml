@@ -1,65 +1,64 @@
-@model SalesOrder
-
-@{
-    ViewData["Title"] = "Sales Order Details";
-}
+@model IntegratedInventoryAndOrderManagementSystem.Models.SalesOrder
 
 <h2>Sales Order Details</h2>
 
 <div>
-    <h4>SalesOrder</h4>
+    <h4>Order #@Model.Id</h4>
     <hr />
     <dl class="row">
-        <dt class="col-sm-2">
-            Order Date
-        </dt>
-        <dd class="col-sm-10">
-            @Model.OrderDate
-        </dd>
-        <dt class="col-sm-2">
-            Status
-        </dt>
-        <dd class="col-sm-10">
-            @Model.Status.Name
-        </dd>
-        <dt class="col-sm-2">
-            Total Cost
-        </dt>
-        <dd class="col-sm-10">
-            @Model.TotalCost
-        </dd>
-        <dt class="col-sm-2">
-            Paid
-        </dt>
-        <dd class="col-sm-10">
-            @Model.isPaid
-        </dd>
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Name)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.Name)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.PhoneNumber)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.PhoneNumber)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Address)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.Address)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.OrderDate)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.OrderDate)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Status)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.Status.Name)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.TotalCost)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.TotalCost)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.isPaid)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.isPaid)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.ShipDate)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.ShipDate)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.TrackingNumber)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.TrackingNumber)</dd>
     </dl>
 </div>
 
-<h4>Items</h4>
+<h4>Order Items</h4>
 <table class="table">
     <thead>
         <tr>
             <th>Product</th>
             <th>Quantity</th>
-            <th>Selling Price</th>
-            <th>Total Price</th>
+            <th>Unit Price</th>
+            <th>Total</th>
         </tr>
     </thead>
     <tbody>
-    @foreach (var item in Model.SalesOrderItems)
-    {
-        <tr>
-            <td>@item.Product.Name</td>
-            <td>@item.Quantity</td>
-            <td>@item.SellingPrice</td>
-            <td>@(item.Quantity * item.SellingPrice)</td>
-        </tr>
-    }
+        @foreach (var item in Model.SalesOrderItems)
+        {
+            <tr>
+                <td>@item.Product.Name</td>
+                <td>@item.Quantity</td>
+                <td>@item.SellingPrice.ToString("C")</td>
+                <td>@((item.Quantity * item.SellingPrice).ToString("C"))</td>
+            </tr>
+        }
     </tbody>
 </table>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
 </div>
