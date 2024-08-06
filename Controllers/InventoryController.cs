@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace IntegratedInventoryAndOrderManagementSystem.Controllers;
 
+[Authorize(Roles = "Admin, Stock")]
 public class InventoryController : GenericController<Inventory>
 {
     private readonly ILogger<InventoryController> _logger;

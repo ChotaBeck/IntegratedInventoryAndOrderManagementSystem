@@ -86,6 +86,17 @@ namespace IntegratedInventoryAndOrderManagementSystem.Controllers
                         }
                         await _context.SaveChangesAsync();
                     }
+                    // Create and save invoice
+                var invoice = new Invoice
+                {
+                    SalesOrderId = salesOrder.Id,
+                    InvoiceNumber = GenerateInvoiceNumber(), // You need to implement this method
+                    InvoiceDate = DateTime.Now,
+                    TotalAmount = salesOrder.TotalCost,
+                    Status = InvoiceStatus.Paid
+                };
+            _context.Invoices.Add(invoice);
+            await _context.SaveChangesAsync();
                 
                     await transaction.CommitAsync();
                     
@@ -287,5 +298,12 @@ namespace IntegratedInventoryAndOrderManagementSystem.Controllers
         }
 
 
+    private string GenerateInvoiceNumber()
+    {
+        // Implement your logic to generate a unique invoice number
+        // This could be a combination of date and a sequential number, for example
+        return $"INV-{DateTime.Now:yyyyMMdd}-{Guid.NewGuid().ToString().Substring(0, 8)}";
     }
+    }
+
 }

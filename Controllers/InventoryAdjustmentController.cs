@@ -3,11 +3,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using IntegratedInventoryAndOrderManagementSystem.Data;
 using IntegratedInventoryAndOrderManagementSystem.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-
+[Authorize(Roles = "Admin, Stock, OrderProcessing")]
 public class InventoryAdjustmentController : Controller
 {
     private readonly ApplicationDbContext _context;

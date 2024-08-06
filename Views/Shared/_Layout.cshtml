@@ -9,8 +9,8 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/IntegratedInventoryAndOrderManagementSystem.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
-
 </head>
+
 @{
     bool IsCurrentRoute(string controller, string action = "Index")
     {
@@ -29,73 +29,119 @@
                 <h3>Inventory System</h3>
             </div>
             <ul class="list-unstyled components">
-                <li class="@(IsCurrentRoute("Home") ? "active" : "")">
-                    <a class="d-flex align-items-center py-2" asp-controller="Home" asp-action="Index">
-                        <i class="fas fa-home me-2"></i> Dashboard
-                    </a>
-                </li>
-                <li class="@(IsCurrentRoute("Product") ? "active" : "")">
-                    <a class="d-flex align-items-center py-2" asp-controller="Product" asp-action="Index">
-                        <i class="fas fa-box me-2"></i> Products
-                    </a>
-                </li>
-                <li class="@(IsCurrentRoute("SalesOrder") ? "active" : "")">
-                    <a class="d-flex align-items-center py-2" asp-controller="SalesOrder" asp-action="Index">
-                        <i class="fas fa-shopping-cart me-2"></i> Orders
-                    </a>
-                </li>
-                <li class="@(IsCurrentRoute("Shipment") ? "active" : "")">
-                    <a class="d-flex align-items-center py-2" asp-controller="Shipment" asp-action="Index">
-                        <i class="fas fa-truck me-2"></i> Shipments
-                    </a>
-                </li>
-                <li class="@(IsCurrentRoute("Inventory") ? "active" : "")">
-                    <a class="d-flex align-items-center py-2" asp-controller="Inventory" asp-action="Index">
-                        <i class="fas fa-warehouse me-2"></i> Inventory
-                    </a>
-                </li>
-                <li>
-                    <a class="d-flex align-items-center py-2" asp-controller="InventoryAdjustment" asp-action="Index">
-                        <i class="fas fa-warehouse me-2"></i> Inventory Adjustment
-                    </a>
-                </li>
-                <li>
-                    <a class="d-flex align-items-center py-2" asp-controller="Recieving" asp-action="Index">
-                        <i class="fas fa-user me-2"></i> Recieving
-                    </a>
-                </li>
-                <li class="@(IsCurrentRoute("Customer") ? "active" : "")">
-                    <a class="d-flex align-items-center py-2" asp-controller="Customer" asp-action="Index">
-                        <i class="fas fa-user me-2"></i> Customer
-                    </a>
-                </li>
-                <li class="@(IsCurrentRoute("Vendor") ? "active" : "")">
-                    <a class="d-flex align-items-center py-2" asp-controller="Vendor" asp-action="Index">
-                        <i class="fas fa-truck me-2"></i> Vendor
-                    </a>
-                </li>
-                <li class="@(IsCurrentRoute("Location") ? "active" : "")">
-                    <a class="d-flex align-items-center py-2" asp-controller="Location" asp-action="Index">
-                        <i class="fas fa-map-marker-alt me-2"></i> Location
-                    </a>
-                </li>
-                <li class="@(IsCurrentRoute("PurchaseOrder") ? "active" : "")">
-                    <a class="d-flex align-items-center py-2" asp-controller="PurchaseOrder" asp-action="Index">
-                        <i class="fas fa-shopping-cart me-2"></i> Purchase Order
-                    </a>
-                </li>
-                <li class="@(IsCurrentRoute("Status") ? "active" : "")">
-                    <a class="d-flex align-items-center py-2" asp-controller="Status" asp-action="Index">
-                        <i class="fas fa-info-circle me-2"></i> Status
-                    </a>
-                </li>
-                <li class="@(IsCurrentRoute("Report") ? "active" : "")">
-                    <a class="d-flex align-items-center py-2" asp-controller="Report" asp-action="Index">
-                        <i class="fas fa-chart-bar me-2"></i> Reports
-                    </a>
-                </li>
+                @if (User.IsInRole("Admin") )
+                {
+                    <li class="@(IsCurrentRoute("Home") ? "active" : "")">
+                        <a class="d-flex align-items-center py-2" asp-controller="Home" asp-action="Index">
+                            <i class="fas fa-home me-2"></i> Dashboard
+                        </a>
+                    </li>
+                }
+                @if (User.IsInRole("Admin") || User.IsInRole("Stock") || User.IsInRole("OrderProcessing"))
+                {
+                    <li class="@(IsCurrentRoute("Product") ? "active" : "")">
+                        <a class="d-flex align-items-center py-2" asp-controller="Product" asp-action="Index">
+                            <i class="fas fa-box me-2"></i> Products
+                        </a>
+                    </li>
+                }
+                @if (User.IsInRole("Admin") || User.IsInRole("Sales"))
+                {
+                    <li class="@(IsCurrentRoute("SalesOrder") ? "active" : "")">
+                        <a class="d-flex align-items-center py-2" asp-controller="SalesOrder" asp-action="Index">
+                            <i class="fas fa-shopping-cart me-2"></i> Sales Orders
+                        </a>
+                    </li>
+                }
+                @if (User.IsInRole("Admin") || User.IsInRole("Sales") || User.IsInRole("Accounts"))
+                {
+                    <li class="@(IsCurrentRoute("SalesOrder") ? "active" : "")">
+                        <a class="d-flex align-items-center py-2" asp-controller="Invoice" asp-action="Index">
+                            <i class="fas fa-shopping-cart me-2"></i> Invoices
+                        </a>
+                    </li>
+                }
+                @if (User.IsInRole("Admin") || User.IsInRole("Shipping"))
+                {
+                    <li class="@(IsCurrentRoute("Shipment") ? "active" : "")">
+                        <a class="d-flex align-items-center py-2" asp-controller="Shipment" asp-action="Index">
+                            <i class="fas fa-truck me-2"></i> Shipments
+                        </a>
+                    </li>
+                }
+                @if (User.IsInRole("Admin") || User.IsInRole("Stock") )
+                {
+                    <li class="@(IsCurrentRoute("Inventory") ? "active" : "")">
+                        <a class="d-flex align-items-center py-2" asp-controller="Inventory" asp-action="Index">
+                            <i class="fas fa-warehouse me-2"></i> Inventory
+                        </a>
+                    </li>
+                }
+                @if (User.IsInRole("Admin") || User.IsInRole("Stock"))
+                {
+                    <li>
+                        <a class="d-flex align-items-center py-2" asp-controller="InventoryAdjustment" asp-action="Index">
+                            <i class="fas fa-warehouse me-2"></i> Inventory Adjustment
+                        </a>
+                    </li>
+                }
+                @if (User.IsInRole("Admin") || User.IsInRole("Receiving"))
+                {
+                    <li>
+                        <a class="d-flex align-items-center py-2" asp-controller="Recieving" asp-action="Index">
+                            <i class="fas fa-user me-2"></i> Recieving
+                        </a>
+                    </li>
+                }
+                @if (User.IsInRole("Admin") )
+                {
+                    <li class="@(IsCurrentRoute("Customer") ? "active" : "")">
+                        <a class="d-flex align-items-center py-2" asp-controller="Customer" asp-action="Index">
+                            <i class="fas fa-user me-2"></i> Customer
+                        </a>
+                    </li>
+                }
+                @if (User.IsInRole("Admin") ||  User.IsInRole("OrderProcessing"))
+                {
+                    <li class="@(IsCurrentRoute("Vendor") ? "active" : "")">
+                        <a class="d-flex align-items-center py-2" asp-controller="Vendor" asp-action="Index">
+                            <i class="fas fa-truck me-2"></i> Vendor
+                        </a>
+                    </li>
+                }
+                @if (User.IsInRole("Admin") || User.IsInRole("Stock")  )
+                {
+                    <li class="@(IsCurrentRoute("Location") ? "active" : "")">
+                        <a class="d-flex align-items-center py-2" asp-controller="Location" asp-action="Index">
+                            <i class="fas fa-map-marker-alt me-2"></i> Location
+                        </a>
+                    </li>
+                }
+                @if (User.IsInRole("Admin") || User.IsInRole("OrderProcessing"))
+                {
+                    <li class="@(IsCurrentRoute("PurchaseOrder") ? "active" : "")">
+                        <a class="d-flex align-items-center py-2" asp-controller="PurchaseOrder" asp-action="Index">
+                            <i class="fas fa-shopping-cart me-2"></i> Purchase Order
+                        </a>
+                    </li>
+                }
+                @if (User.IsInRole("Admin") || User.IsInRole("OrderProcessing") )
+                {
+                    <li class="@(IsCurrentRoute("Status") ? "active" : "")">
+                        <a class="d-flex align-items-center py-2" asp-controller="Status" asp-action="Index">
+                            <i class="fas fa-info-circle me-2"></i> Status
+                        </a>
+                    </li>
+                }
+                @if (User.IsInRole("Admin") || User.IsInRole("ReportManager"))
+                {
+                    <li class="@(IsCurrentRoute("Report") ? "active" : "")">
+                        <a class="d-flex align-items-center py-2" asp-controller="Report" asp-action="Index">
+                            <i class="fas fa-chart-bar me-2"></i> Reports
+                        </a>
+                    </li>
+                }
             </ul>
-
         </nav>
 
         <!-- Page Content -->
