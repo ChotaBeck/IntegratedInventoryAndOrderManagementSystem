@@ -362,6 +362,30 @@ namespace IntegratedInventoryAndOrderManagementSystem.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Invoices",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    SalesOrderId = table.Column<int>(type: "INTEGER", nullable: false),
+                    InvoiceNumber = table.Column<string>(type: "TEXT", nullable: false),
+                    InvoiceDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    TotalAmount = table.Column<decimal>(type: "TEXT", nullable: false),
+                    Status = table.Column<int>(type: "INTEGER", nullable: false),
+                    DueDate = table.Column<DateTime>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Invoices", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Invoices_SalesOrders_SalesOrderId",
+                        column: x => x.SalesOrderId,
+                        principalTable: "SalesOrders",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "SalesOrderItems",
                 columns: table => new
                 {
@@ -500,6 +524,11 @@ namespace IntegratedInventoryAndOrderManagementSystem.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Invoices_SalesOrderId",
+                table: "Invoices",
+                column: "SalesOrderId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Products_LocationId",
                 table: "Products",
                 column: "LocationId");
@@ -579,6 +608,9 @@ namespace IntegratedInventoryAndOrderManagementSystem.Migrations
 
             migrationBuilder.DropTable(
                 name: "InventoryAdjustments");
+
+            migrationBuilder.DropTable(
+                name: "Invoices");
 
             migrationBuilder.DropTable(
                 name: "PurchaseOrderItems");

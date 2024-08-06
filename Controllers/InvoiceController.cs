@@ -119,7 +119,7 @@ namespace IntegratedInventoryAndOrderManagementSystem.Controllers
 
             var invoice = await _context.Invoices
                 .Include(i => i.SalesOrder)
-                .ThenInclude(so => so.OrderItems)
+                .ThenInclude(so => so.SalesOrderItems)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (invoice == null)
@@ -152,7 +152,7 @@ namespace IntegratedInventoryAndOrderManagementSystem.Controllers
     {
         var invoice = await _context.Invoices
             .Include(i => i.SalesOrder)
-            .ThenInclude(so => so.OrderItems)
+            .ThenInclude(so => so.SalesOrderItems)
             .FirstOrDefaultAsync(i => i.Id == id);
 
         if (invoice == null)

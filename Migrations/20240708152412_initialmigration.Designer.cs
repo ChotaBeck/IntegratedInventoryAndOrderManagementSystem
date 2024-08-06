@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IntegratedInventoryAndOrderManagementSystem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240708095055_initialmigration")]
+    [Migration("20240708152412_initialmigration")]
     partial class initialmigration
     {
         /// <inheritdoc />
@@ -121,6 +121,38 @@ namespace IntegratedInventoryAndOrderManagementSystem.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("InventoryAdjustments");
+                });
+
+            modelBuilder.Entity("IntegratedInventoryAndOrderManagementSystem.Models.Invoice", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("DueDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("InvoiceDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("InvoiceNumber")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("SalesOrderId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("TotalAmount")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SalesOrderId");
+
+                    b.ToTable("Invoices");
                 });
 
             modelBuilder.Entity("IntegratedInventoryAndOrderManagementSystem.Models.Location", b =>
@@ -607,6 +639,17 @@ namespace IntegratedInventoryAndOrderManagementSystem.Migrations
                         .IsRequired();
 
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("IntegratedInventoryAndOrderManagementSystem.Models.Invoice", b =>
+                {
+                    b.HasOne("IntegratedInventoryAndOrderManagementSystem.Models.SalesOrder", "SalesOrder")
+                        .WithMany()
+                        .HasForeignKey("SalesOrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SalesOrder");
                 });
 
             modelBuilder.Entity("IntegratedInventoryAndOrderManagementSystem.Models.Product", b =>

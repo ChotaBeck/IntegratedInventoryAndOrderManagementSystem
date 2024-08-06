@@ -21,9 +21,10 @@ namespace IntegratedInventoryAndOrderManagementSystem.Controllers
         }
 
         // GET: PurchaseOrder
-        public async Task<IActionResult> Index()
+        public  IActionResult Index()
         {
-            return View(await _context.PurchaseOrders.ToListAsync());
+            var purchaseOrders = _context.PurchaseOrders.Include(p => p.Vendor).Include(p => p.Status).ToList();
+            return View(purchaseOrders);
         }
 
         // GET: PurchaseOrder/Details/5

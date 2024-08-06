@@ -21,6 +21,6 @@ namespace IntegratedInventoryAndOrderManagementSystem.Models
         public decimal TotalCost { get; set; }
         public DateTime? ShipDate { get; set; }
         public string? TrackingNumber { get; set; }
-        public object OrderItems { get; internal set; }
+        
     }
 }

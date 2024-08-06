@@ -1,0 +1,34 @@
+@model IEnumerable<PurchaseOrder>
+
+<h2>Receivings</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Purchase Order</th>
+            <th>Vendor</th>
+            <th>Status</th>
+            <th>Total</th>
+            <th>Recieved</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Vendor.Name </td>
+                <td>@item.Status.Name</td>
+                <td>@item.TotalCost</td>
+                <td>@(item.IsReceived ? "Recieved" : "Not Recieved")</td>
+                <td>
+                    <a asp-action="Recieve" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Receive</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

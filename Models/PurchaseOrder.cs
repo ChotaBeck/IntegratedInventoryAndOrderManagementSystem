@@ -12,13 +12,13 @@ namespace IntegratedInventoryAndOrderManagementSystem.Models
         public int VendorId { get; set; }
         [ForeignKey("VendorId")]
         public Vendor Vendor {get; set;}
-        
         public DateOnly OrderDate { get; set; }
         public int StatusId { get; set; }
         [ForeignKey("StatusId")]
         public Status Status { get; set; }
         public List<PurchaseOrderItem> PurchaseOrderItems { get; set; }
         public decimal TotalCost { get; set; }
+        public bool IsReceived { get; set; } = false;
 
     }
 }

@@ -1,0 +1,36 @@
+@model Receiving
+
+<h2>Edit Receiving</h2>
+
+<form asp-action="Edit">
+    <input type="hidden" asp-for="Id" />
+    <div class="form-group">
+        <label asp-for="PurchaseOrderId" class="control-label"></label>
+        <select asp-for="PurchaseOrderId" class="form-control" asp-items="@(new SelectList(ViewBag.PurchaseOrders, "Id", "PurchaseOrderNumber"))"></select>
+    </div>
+    <div class="form-group">
+        <label asp-for="ReceiveDate" class="control-label"></label>
+        <input asp-for="ReceiveDate" class="form-control" />
+        <span asp-validation-for="ReceiveDate" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="ReceivedBy" class="control-label"></label>
+        <input asp-for="ReceivedBy" class="form-control" />
+        <span asp-validation-for="ReceivedBy" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Notes" class="control-label"></label>
+        <textarea asp-for="Notes" class="form-control"></textarea>
+    </div>
+    <div class="form-check">
+        <input asp-for="IsCompleted" class="form-check-input" type="checkbox" />
+        <label asp-for="IsCompleted" class="form-check-label">Mark as Completed</label>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Save" class="btn btn-primary" />
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
