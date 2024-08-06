@@ -1,0 +1,41 @@
+@model IEnumerable<IntegratedInventoryAndOrderManagementSystem.Models.Shipment>
+
+@{
+    ViewData["Title"] = "Shipments";
+}
+
+<h1>Shipments</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.SalesOrderId)</th>
+            <th>@Html.DisplayNameFor(model => model.ShippingDate)</th>
+            <th>@Html.DisplayNameFor(model => model.TrackingNumber)</th>
+            <th>@Html.DisplayNameFor(model => model.ShippingCarrier)</th>
+            <th>@Html.DisplayNameFor(model => model.ShippingCost)</th>
+            <th>@Html.DisplayNameFor(model => model.Status.Name)</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.SalesOrderId)</td>
+            <td>@Html.DisplayFor(modelItem => item.ShippingDate)</td>
+            <td>@Html.DisplayFor(modelItem => item.TrackingNumber)</td>
+            <td>@Html.DisplayFor(modelItem => item.ShippingCarrier)</td>
+            <td>@Html.DisplayFor(modelItem => item.ShippingCost)</td>
+            <td>@Html.DisplayFor(modelItem => item.Status.Name)</td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit</a>
+                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Details</a>
+                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

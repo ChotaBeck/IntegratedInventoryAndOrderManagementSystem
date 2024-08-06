@@ -37,12 +37,11 @@ namespace IntegratedInventoryAndOrderManagementSystem.Controllers
             return View();
         }
 
-        // POST: SalesOrder/Create
+      // POST: SalesOrder/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Name,PhoneNumber,Address,OrderDate,StatusId,isPaid,TotalCost")] SalesOrder salesOrder, List<SalesOrderItem> salesOrderItems)
         {
-            
             ModelState.Remove("Status");
             ModelState.Remove("SalesOrderItems");
             for(int i = 0; i < salesOrderItems.Count; i++)
@@ -50,9 +49,9 @@ namespace IntegratedInventoryAndOrderManagementSystem.Controllers
                 ModelState.Remove($"SalesOrderItems[{i}].Product");
                 ModelState.Remove($"SalesOrderItems[{i}].SalesOrder");
             }
-           
-            salesOrder.TrackingNumber = GenerateRandomString(15);
         
+            salesOrder.TrackingNumber = GenerateRandomString(15);
+
             if (ModelState.IsValid)
             {
                 using var transaction = await _context.Database.BeginTransactionAsync();
@@ -67,19 +66,35 @@ namespace IntegratedInventoryAndOrderManagementSystem.Controllers
                         {
                             item.SalesOrderId = salesOrder.Id;
                             _context.SalesOrderItems.Add(item);
+
+                            // Deduct inventory
+                            var inventory = await _context.Inventories
+                                .FirstOrDefaultAsync(i => i.ProductId == item.ProductId);
+                            
+                            if (inventory == null)
+                            {
+                                throw new Exception($"Inventory not found for product ID {item.ProductId}");
+                            }
+
+                            if (inventory.Quantity < item.Quantity)
+                            {
+                                throw new Exception($"Insufficient inventory for product ID {item.ProductId}. Available: {inventory.Quantity}, Requested: {item.Quantity}");
+                            }
+
+                            inventory.Quantity -= item.Quantity;
+                            _context.Update(inventory);
                         }
                         await _context.SaveChangesAsync();
                     }
-                   
+                
                     await transaction.CommitAsync();
-
                     
                     return RedirectToAction(nameof(Index));
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     await transaction.RollbackAsync();
-                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                    ModelState.AddModelError("", $"Unable to save changes. {ex.Message}");
                 }
             }
 
@@ -88,7 +103,7 @@ namespace IntegratedInventoryAndOrderManagementSystem.Controllers
             return View(salesOrder);
         }
 
-           // GET: SalesOrder/Details/5
+        // GET: SalesOrder/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
