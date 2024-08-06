@@ -11,6 +11,7 @@ public class ApplicationDbContext : IdentityDbContext<IdentityUser>
         : base(options)
     {
     }
+    
     public DbSet<Customer> Customers { get; set; }
     public DbSet<Product> Products { get; set; }
     public DbSet<PurchaseOrder> PurchaseOrders { get; set; }
@@ -24,6 +25,8 @@ public class ApplicationDbContext : IdentityDbContext<IdentityUser>
     public DbSet<SalesOrder> SalesOrders { get; set; }
     public DbSet<SalesOrderItem> SalesOrderItems { get; set; }
     public DbSet<Department> Departments { get; set; }
+    public DbSet<Invoice> Invoices { get; set; }
+    public DbSet<Receiving> Receivings { get; set; }
 
     // protected override void OnModelCreating(ModelBuilder builder)
     // {

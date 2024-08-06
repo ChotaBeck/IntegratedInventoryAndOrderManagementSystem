@@ -4,6 +4,7 @@ using IntegratedInventoryAndOrderManagementSystem.Data;
 using IntegratedInventoryAndOrderManagementSystem.Models;
 using IntegratedInventoryAndOrderManagementSystem.Services;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -26,6 +27,8 @@ builder.Services.AddScoped<ServiceBase<PurchaseOrder>, ServiceBase<PurchaseOrder
 builder.Services.AddScoped<ServiceBase<Inventory>, ServiceBase<Inventory>>();
 builder.Services.AddScoped<ServiceBase<Vendor>, ServiceBase<Vendor>>();
 builder.Services.AddScoped<ServiceBase<Department>, ServiceBase<Department>>();
+builder.Services.AddScoped<IInvoiceService, InvoiceService>();
+builder.Services.AddScoped<InvoicePdfService>();
 
 
 
