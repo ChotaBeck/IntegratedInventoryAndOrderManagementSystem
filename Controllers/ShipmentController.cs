@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace IntegratedInventoryAndOrderManagementSystem.Controllers;
 
-[Authorize(Roles = "Admin")]
+// [Authorize(Roles = "Admin")]
 public class ShipmentController : Controller
 {
     private readonly ApplicationDbContext _context;

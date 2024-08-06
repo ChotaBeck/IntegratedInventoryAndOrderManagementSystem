@@ -1,8 +1,8 @@
-@model Receiving
+@model ReceivingViewModel
 
 <h2>Receiving Products</h2>
 
-<form asp-action="Recieve" method="post">
+<form asp-action="Receive" method="post">
     <div class="form-group">
         <label asp-for="PurchaseOrderId" class="control-label"></label>
         <input asp-for="PurchaseOrderId" class="form-control" readonly />
@@ -29,15 +29,17 @@
             </tr>
         </thead>
         <tbody>
-             @for (int i = 0; i < Model.PurchaseOrder.PurchaseOrderItems.Count; i++)
+             @for (int i = 0; i < Model.PurchaseOrderItems.Count; i++)
             {
                 <tr>
-                    <td>@Model.PurchaseOrder.PurchaseOrderItems[i].Product.Name</td>
-                    <td>@Model.PurchaseOrder.PurchaseOrderItems[i].Quantity</td>
+                    <td>@Model.PurchaseOrderItems[i].ProductName</td>
+                    <td>@Model.PurchaseOrderItems[i].Quantity</td>
                     <td>
-                        <input asp-for="PurchaseOrder.PurchaseOrderItems[i].ReceivedQuantity" type="number" class="form-control" />
-                        <input type="hidden" asp-for="PurchaseOrder.PurchaseOrderItems[i].Id" />
-                        <input type="hidden" asp-for="PurchaseOrder.PurchaseOrderItems[i].ProductId" />
+                        <input asp-for="PurchaseOrderItems[i].ReceivedQuantity" type="number" class="form-control" />
+                        <input type="hidden" asp-for="PurchaseOrderItems[i].Id" />
+                        <input type="hidden" asp-for="PurchaseOrderItems[i].ProductId" />
+                        <input type="hidden" asp-for="PurchaseOrderItems[i].ProductName" />
+                        <input type="hidden" asp-for="PurchaseOrderItems[i].Quantity" />
                     </td>
                 </tr>
             }
@@ -58,7 +60,3 @@
         <input type="submit" value="Submit" class="btn btn-primary" />
     </div>
 </form>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
