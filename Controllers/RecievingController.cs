@@ -112,6 +112,8 @@ public class RecievingController : Controller
             var purchaseOrder = await _context.PurchaseOrders
                 .Include(po => po.PurchaseOrderItems)
                 .FirstOrDefaultAsync(po => po.Id == viewModel.PurchaseOrderId);
+            purchaseOrder.StatusId = 5;
+            _context.Update(purchaseOrder);
 
             if (purchaseOrder != null)
             {

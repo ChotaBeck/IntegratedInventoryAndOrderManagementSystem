@@ -50,26 +50,77 @@ public class ShipmentController : Controller
     }
 
     // CREATE GET
-    public IActionResult Create()
+public IActionResult Create(int id)
+{
+    var salesOrder = _context.SalesOrders.Find(id);
+    if (salesOrder == null)
     {
-        ViewBag.SalesOrders = new SelectList(_context.SalesOrders, "Id", "Id");
-        return View();
+        return NotFound();
     }
 
-    // CREATE POST
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("SalesOrderId,ShippingDate,TrackingNumber")] Shipment shipment)
+    ViewBag.Statuses = new SelectList(_context.Statuses, "Id", "Name");
+    ViewBag.SalesOrderId = new SelectList(new[] { salesOrder }, "Id", "Id");
+
+    var shipment = new Shipment
     {
-        if (ModelState.IsValid)
+        SalesOrderId = salesOrder.Id,
+        ShippingDate = DateOnly.FromDateTime(DateTime.Now),
+        TrackingNumber = salesOrder.TrackingNumber
+    };
+    return View(shipment);
+}
+
+    public async Task<IActionResult> NewShipment()
+    {
+        var salesOrders = await _context.SalesOrders
+                .Include(s => s.Status)
+                .OrderByDescending(s => s.OrderDate)
+                .Where(s => s.ShipDate == null)
+                .ToListAsync();
+                
+            return View(salesOrders);
+
+    }
+
+   // CREATE POST
+[HttpPost]
+[ValidateAntiForgeryToken]
+public async Task<IActionResult> Create([Bind("SalesOrderId,ShippingDate,TrackingNumber,ShippingCarrier,ShippingCost,StatusId")] Shipment shipment)
+{
+    ModelState.Remove("SalesOrder"); // Remove complex type validation
+    ModelState.Remove("Status");
+    if (ModelState.IsValid)
+    {
+        try
         {
+            var salesOrder = await _context.SalesOrders.FindAsync(shipment.SalesOrderId);
+            salesOrder.ShipDate = DateTime.Now;
+            if (salesOrder == null)
+            {
+                return NotFound($"Sales Order with ID {shipment.SalesOrderId} not found.");
+            }
+            
+
+            // Update the sales order status if needed
+            salesOrder.StatusId = shipment.StatusId; // Assuming you want to update the sales order status
+            _context.Update(salesOrder);
+
             _context.Add(shipment);
             await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Index));
         }
-        ViewBag.SalesOrders = new SelectList(_context.SalesOrders, "Id", "Id", shipment.SalesOrderId);
-        return View(shipment);
+        catch (Exception ex)
+        {
+            ModelState.AddModelError("", $"Unable to create shipment. Error: {ex.Message}");
+        }
     }
+
+    // If we got this far, something failed; redisplay form
+    ViewBag.Statuses = new SelectList(_context.Statuses, "Id", "Name", shipment.StatusId);
+    ViewBag.SalesOrderId = new SelectList(new[] { await _context.SalesOrders.FindAsync(shipment.SalesOrderId) }, "Id", "Id");
+    return View(shipment);
+}
 
     // EDIT GET
     public async Task<IActionResult> Edit(int? id)
