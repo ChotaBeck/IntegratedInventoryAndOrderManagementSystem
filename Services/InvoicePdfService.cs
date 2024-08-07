@@ -4,13 +4,22 @@ using IntegratedInventoryAndOrderManagementSystem.Models;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 
-
 namespace IntegratedInventoryAndOrderManagementSystem.Services
 {
     public class InvoicePdfService
     {
         public byte[] GenerateInvoicePdf(Invoice invoice, List<SalesOrderItem> orderItems)
         {
+            if (invoice == null)
+            {
+                throw new ArgumentNullException(nameof(invoice), "Invoice cannot be null");
+            }
+
+            if (orderItems == null)
+            {
+                throw new ArgumentNullException(nameof(orderItems), "Order items cannot be null");
+            }
+
             using (MemoryStream ms = new MemoryStream())
             {
                 Document document = new Document(PageSize.A4, 25, 25, 30, 30);
@@ -48,6 +57,11 @@ namespace IntegratedInventoryAndOrderManagementSystem.Services
 
                 foreach (var item in orderItems)
                 {
+                    if (item.Product == null)
+                    {
+                        throw new ArgumentNullException(nameof(item.Product), "Product cannot be null");
+                    }
+
                     table.AddCell(item.Product.Name);
                     table.AddCell(item.Quantity.ToString());
                     table.AddCell(item.SellingPrice.ToString("C"));

@@ -1,30 +1,42 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using IntegratedInventoryAndOrderManagementSystem.Models;
+using System.Linq;
+using System.Threading.Tasks;
+using IntegratedInventoryAndOrderManagementSystem.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
-namespace IntegratedInventoryAndOrderManagementSystem.Controllers;
-public class HomeController : Controller
+namespace IntegratedInventoryAndOrderManagementSystem.Controllers
 {
-    private readonly ILogger<HomeController> _logger;
-
-    public HomeController(ILogger<HomeController> logger)
+    [Authorize]
+    public class HomeController : Controller
     {
-        _logger = logger;
-    }
+        private readonly ApplicationDbContext _context;
 
-    public IActionResult Index()
-    {
-        return View();
-    }
+        public HomeController(ApplicationDbContext context)
+        {
+            _context = context;
+        }
 
-    public IActionResult Privacy()
-    {
-        return View();
-    }
+        public IActionResult Index()
+        {
+            return View();
+        }
 
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        [HttpGet]
+        public async Task<IActionResult> GetCounts()
+        {
+            var productCount = await _context.Products.CountAsync();
+            var orderCount = await _context.SalesOrders.CountAsync();
+            var shipmentCount = await _context.Shipments.CountAsync();
+            var customerCount = await _context.Customers.CountAsync();
+
+            return Json(new
+            {
+                productCount,
+                orderCount,
+                shipmentCount,
+                customerCount
+            });
+        }
     }
 }

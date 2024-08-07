@@ -89,7 +89,7 @@ using (var scope = app.Services.CreateScope())
         ("orderprocessing@orderprocessing.com", "OrderProcessing@123.", "OrderProcessing"),
         ("accounts@accounts.com", "Accounts@123.", "Accounts"),
         ("shipping@shipping.com", "Shipping@123.", "Shipping"),
-        ("recieving@recieving.com", "Recieving@123.", "Recieving"),
+        ("receiving@receiving.com", "Receiving@123.", "Receiving"),
         ("sales@sales.com", "Sales@123.", "Sales")
     
     };

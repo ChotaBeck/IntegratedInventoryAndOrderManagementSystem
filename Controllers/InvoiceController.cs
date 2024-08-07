@@ -148,22 +148,28 @@ namespace IntegratedInventoryAndOrderManagementSystem.Controllers
             return RedirectToAction(nameof(Details), new { id = invoice.Id });
         }
 
-         public async Task<IActionResult> DownloadPdf(int id)
-    {
-        var invoice = await _context.Invoices
-            .Include(i => i.SalesOrder)
-            .ThenInclude(so => so.SalesOrderItems)
-            .FirstOrDefaultAsync(i => i.Id == id);
-
-        if (invoice == null)
+      public async Task<IActionResult> DownloadPdf(int id)
         {
-            return NotFound();
+            var invoice = await _context.Invoices
+                .Include(i => i.SalesOrder)
+                .ThenInclude(so => so.SalesOrderItems)
+                .ThenInclude(soi => soi.Product) // Ensure Product is included
+                .FirstOrDefaultAsync(i => i.Id == id);
+
+            if (invoice == null)
+            {
+                return NotFound();
+            }
+
+            if (invoice.SalesOrder == null || invoice.SalesOrder.SalesOrderItems == null)
+            {
+                return BadRequest("Invoice or Sales Order Items are missing");
+            }
+
+            var pdfBytes = _pdfService.GenerateInvoicePdf(invoice, invoice.SalesOrder.SalesOrderItems.ToList());
+
+            return File(pdfBytes, "application/pdf", $"Invoice_{invoice.InvoiceNumber}.pdf");
         }
-
-        var pdfBytes = _pdfService.GenerateInvoicePdf(invoice, invoice.SalesOrder.SalesOrderItems.ToList());
-
-        return File(pdfBytes, "application/pdf", $"Invoice_{invoice.InvoiceNumber}.pdf");
-    }
 
     }
 }
