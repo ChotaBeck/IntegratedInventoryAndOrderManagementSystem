@@ -53,7 +53,7 @@
                         </a>
                     </li>
                 }
-                @if (User.IsInRole("Admin") || User.IsInRole("Sales") || User.IsInRole("Accounts"))
+                @if (User.IsInRole("Admin") || User.IsInRole("Accounts"))
                 {
                     <li class="@(IsCurrentRoute("SalesOrder") ? "active" : "")">
                         <a class="d-flex align-items-center py-2" asp-controller="Invoice" asp-action="Index">
@@ -69,7 +69,7 @@
                         </a>
                     </li>
                 }
-                @if (User.IsInRole("Admin") || User.IsInRole("Stock") )
+                @if (User.IsInRole("Admin") || User.IsInRole("Stock") || User.IsInRole("Sales") )
                 {
                     <li class="@(IsCurrentRoute("Inventory") ? "active" : "")">
                         <a class="d-flex align-items-center py-2" asp-controller="Inventory" asp-action="Index">
@@ -89,7 +89,7 @@
                 {
                     <li>
                         <a class="d-flex align-items-center py-2" asp-controller="Recieving" asp-action="Index">
-                            <i class="fas fa-user me-2"></i> Recieving
+                            <i class="fas fa-user me-2"></i> New Recieving
                         </a>
                     </li>
                 }

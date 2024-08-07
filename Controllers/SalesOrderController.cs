@@ -79,7 +79,7 @@ namespace IntegratedInventoryAndOrderManagementSystem.Controllers
                             if (inventory.Quantity < item.Quantity)
                             {
                                 throw new Exception($"Insufficient inventory for product ID {item.ProductId}. Available: {inventory.Quantity}, Requested: {item.Quantity}");
-                            }
+                            }                            
 
                             inventory.Quantity -= item.Quantity;
                             _context.Update(inventory);
@@ -95,8 +95,17 @@ namespace IntegratedInventoryAndOrderManagementSystem.Controllers
                     TotalAmount = salesOrder.TotalCost,
                     Status = InvoiceStatus.Paid
                 };
-            _context.Invoices.Add(invoice);
-            await _context.SaveChangesAsync();
+
+                var customer = new Customer
+                {
+                    Name = salesOrder.Name,
+                    PhoneNumber = salesOrder.PhoneNumber,
+                    Address = salesOrder.Address,
+                    Email = ""
+                };
+                _context.Customers.Add(customer);
+                _context.Invoices.Add(invoice);
+                await _context.SaveChangesAsync();
                 
                     await transaction.CommitAsync();
                     
